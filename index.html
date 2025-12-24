@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Viaje Panas 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div id="root"></div>
+    
+    <!-- Sistema de persistencia -->
+    <script src="data/storage.js"></script>
+    
+    <!-- Datos -->
+    <script src="data/destinations.js"></script>
+    <script src="data/users.js"></script>
+    <script type="text/babel" src="data/mediaService.js"></script>
+    
+    <!-- Componentes -->
+    <script type="text/babel" src="components/UserSelection.js"></script>
+    <script type="text/babel" src="components/VotingCard.js"></script>
+    <script type="text/babel" src="components/DestinationDetail.js"></script>
+    <script type="text/babel" src="components/FlightsTab.js"></script>
+    <script type="text/babel" src="components/TikTokFeed.js"></script>
+    <script type="text/babel" src="components/ItineraryPlanner.js"></script>
+    
+    <!-- App principal -->
+    <script type="text/babel" src="components/App.js"></script>
+</body>
+</html>
