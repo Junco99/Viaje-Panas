@@ -206,25 +206,27 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                     </div>
                     
                     {/* Tabs navegación - RESPONSIVE */}
-                    <div className="border-b border-gray-200 mb-4 md:mb-6">
-                        <div className="flex gap-2 md:gap-4 overflow-x-auto justify-start md:justify-center tabs-mobile pb-2">
+                 {/* Tabs navegación - ARREGLADO para móvil */}
+                    <div className="border-b border-gray-200 mb-6 overflow-x-auto">
+                        <div className="flex gap-2 min-w-max px-2">
                             {[
-                                ['overview', 'Info General', '🌟'],
-                                ['tiktok', 'TikTok INTEL 🔥', '🎵'],
+                                ['overview', 'Info', '🌟'],
+                                ['tiktok', 'TikTok', '🎵'],
                                 ['highlights', 'Destacados', '✨'],
-                                ['images', 'Fotos Reales', '📸'],
+                                ['images', 'Fotos', '📸'],
                                 ['flights', 'Vuelos', '✈️']
                             ].map(([id, label, icon]) => (
                                 <button
                                     key={id}
                                     onClick={() => setActiveTab(id)}
-                                    className={`pb-2 md:pb-3 px-3 md:px-4 font-bold transition-all whitespace-nowrap tab-button-mobile ${
+                                    className={`pb-3 px-3 text-sm font-bold transition-all whitespace-nowrap ${
                                         activeTab === id 
-                                            ? 'text-blue-600 border-b-2 md:border-b-4 border-blue-600 scale-105' 
-                                            : 'text-gray-600 hover:text-gray-900 border-b-2 md:border-b-4 border-transparent'
-                                    } ${id === 'tiktok' ? 'text-pink-600' : ''}`}
+                                            ? 'text-blue-600 border-b-4 border-blue-600' 
+                                            : 'text-gray-600 hover:text-gray-900 border-b-4 border-transparent'
+                                    }`}
                                 >
-                                    <span className="text-sm md:text-base">{icon} {label}</span>
+                                    <span className="block sm:hidden">{icon}</span>
+                                    <span className="hidden sm:block">{icon} {label}</span>
                                 </button>
                             ))}
                         </div>
