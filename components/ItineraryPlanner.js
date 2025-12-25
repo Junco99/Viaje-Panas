@@ -2,7 +2,7 @@
 function ItineraryPlanner({ destination }) {
     const [selectedDay, setSelectedDay] = React.useState(1);
     const [expandedActivity, setExpandedActivity] = React.useState(null);
-    
+
     // ITINERARIOS COMPLETOS CON DATOS 100% REALES VERIFICADOS
     const itineraries = {
         'albania': [
@@ -257,7 +257,7 @@ function ItineraryPlanner({ destination }) {
                 day: 1,
                 title: "Llegada a Malta",
                 emoji: "🇲🇹",
-                color: "from-red-600 via-white to-red-600",
+                color: "from-blue-500 to-cyan-500",
                 activities: [
                     { time: "12:00", activity: "Llegada MLA + traslado", icon: "✈️", details: "Bus X4 St Julian's: €2. Taxi: €20", cost: "€2-20" },
                     { time: "14:00", activity: "Check-in St Julian's + almuerzo", icon: "🏨", details: "Hotel cerca Paceville. Pizza/pasta", cost: "€12-15" },
@@ -431,11 +431,10 @@ function ItineraryPlanner({ destination }) {
                         <button
                             key={day}
                             onClick={() => setSelectedDay(day)}
-                            className={`flex-shrink-0 px-4 py-3 rounded-xl font-bold transition-all text-center min-w-[100px] ${
-                                selectedDay === day 
-                                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg scale-105' 
+                            className={`flex-shrink-0 px-4 py-3 rounded-xl font-bold transition-all text-center min-w-[100px] ${selectedDay === day
+                                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg scale-105'
                                     : 'bg-white text-gray-700 hover:bg-gray-50 shadow'
-                            }`}
+                                }`}
                         >
                             <div className="text-2xl mb-1">{dayData?.emoji || '📅'}</div>
                             <div className="text-xs font-bold">Día {day}</div>
@@ -457,7 +456,7 @@ function ItineraryPlanner({ destination }) {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* Timeline COMPACTO */}
                     <div className="p-6 max-h-[500px] overflow-y-auto">
                         <div className="space-y-2">
@@ -466,47 +465,45 @@ function ItineraryPlanner({ destination }) {
                                 const isNight = parseInt(activity.time.split(':')[0]) >= 22 || parseInt(activity.time.split(':')[0]) <= 5;
                                 const isFiesta = activity.activity.includes('🔥') || activity.activity.toLowerCase().includes('club');
                                 const isLibre = activity.activity.includes('TIEMPO LIBRE');
-                                
+
                                 return (
-                                    <div 
+                                    <div
                                         key={index}
-                                        className={`flex gap-3 p-3 rounded-xl cursor-pointer transition-all ${
-                                            isExpanded 
-                                                ? 'bg-blue-50 shadow-md scale-[1.02]' 
+                                        className={`flex gap-3 p-3 rounded-xl cursor-pointer transition-all ${isExpanded
+                                                ? 'bg-blue-50 shadow-md scale-[1.02]'
                                                 : isFiesta
-                                                ? 'bg-pink-50 hover:bg-pink-100'
-                                                : isLibre
-                                                ? 'bg-yellow-50 hover:bg-yellow-100'
-                                                : 'bg-gray-50 hover:bg-gray-100'
-                                        }`}
+                                                    ? 'bg-pink-50 hover:bg-pink-100'
+                                                    : isLibre
+                                                        ? 'bg-yellow-50 hover:bg-yellow-100'
+                                                        : 'bg-gray-50 hover:bg-gray-100'
+                                            }`}
                                         onClick={() => setExpandedActivity(isExpanded ? null : index)}
                                     >
                                         {/* Tiempo + Emoji */}
                                         <div className="flex-shrink-0 text-center">
                                             <div className="text-2xl mb-1">{activity.icon}</div>
-                                            <div className={`text-xs font-black px-2 py-1 rounded-full text-white ${
-                                                isFiesta 
-                                                    ? 'bg-gradient-to-r from-pink-500 to-red-500' 
+                                            <div className={`text-xs font-black px-2 py-1 rounded-full text-white ${isFiesta
+                                                    ? 'bg-gradient-to-r from-pink-500 to-red-500'
                                                     : isNight
-                                                    ? 'bg-gradient-to-r from-indigo-500 to-purple-600'
-                                                    : 'bg-gradient-to-r from-blue-500 to-cyan-600'
-                                            }`}>
+                                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-600'
+                                                        : 'bg-gradient-to-r from-blue-500 to-cyan-600'
+                                                }`}>
                                                 {activity.time}
                                             </div>
                                         </div>
-                                        
+
                                         {/* Contenido */}
                                         <div className="flex-1 min-w-0">
                                             <h4 className="font-bold text-gray-900 text-sm leading-tight mb-1">
                                                 {activity.activity}
                                             </h4>
-                                            
+
                                             {!isExpanded && (
                                                 <p className="text-xs text-gray-600 truncate">
                                                     {activity.details}
                                                 </p>
                                             )}
-                                            
+
                                             {/* Detalles expandido */}
                                             {isExpanded && (
                                                 <div className="mt-2 space-y-2">
@@ -522,7 +519,7 @@ function ItineraryPlanner({ destination }) {
                                                 </div>
                                             )}
                                         </div>
-                                        
+
                                         {/* Expand arrow */}
                                         <div className="flex-shrink-0 text-gray-400 text-sm">
                                             {isExpanded ? '▲' : '▼'}
@@ -532,7 +529,7 @@ function ItineraryPlanner({ destination }) {
                             })}
                         </div>
                     </div>
-                    
+
                     {/* Footer mini */}
                     <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 border-t">
                         <div className="flex items-center justify-between text-xs">

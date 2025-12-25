@@ -81,68 +81,67 @@ function TikTokFeed({ destination }) {
     const tiktokUrls = getTikTokUrls(destination.id);
 
     return (
-        <div className="bg-black text-white min-h-screen p-6">
+        <div className="bg-black text-white min-h-screen p-4 md:p-6">
             {/* Header Importante */}
-            <div className="text-center mb-8">
-                <div className="flex items-center justify-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <div className="text-center mb-6 md:mb-8">
+                <div className="flex items-center justify-center gap-2 md:gap-3 mb-3 md:mb-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center text-xl md:text-2xl">
                         🎵
                     </div>
-                    <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
+                    <h2 className="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
                         TikTok Intel: {destination.name}
                     </h2>
                 </div>
-                <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-                    <strong>🔥 LA FUENTE MÁS IMPORTANTE DE INFORMACIÓN</strong><br/>
+                <p className="text-gray-300 text-sm md:text-lg max-w-2xl mx-auto px-2">
+                    <strong>🔥 LA FUENTE MÁS IMPORTANTE DE INFORMACIÓN</strong><br />
                     Aquí descubres la vida real: fiestas, lugares secretos, comida, precios y todo lo que NO te cuentan las guías
                 </p>
             </div>
 
             {/* Navegación de Hashtags */}
-            <div className="bg-gray-900 rounded-2xl p-6 mb-8">
-                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <div className="bg-gray-900 rounded-2xl p-4 md:p-6 mb-6 md:mb-8">
+                <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4 flex items-center gap-2">
                     📊 Hashtags con más Intel sobre {destination.name}
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3">
                     {hashtags.map((hashtag, index) => (
                         <button
                             key={index}
                             onClick={() => setActiveHashtag(index)}
-                            className={`p-4 rounded-xl transition-all text-left ${
-                                activeHashtag === index 
-                                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 transform scale-105' 
+                            className={`p-3 md:p-4 rounded-xl transition-all text-left ${activeHashtag === index
+                                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 transform scale-105'
                                     : 'bg-gray-800 hover:bg-gray-700'
-                            }`}
+                                }`}
                         >
-                            <div className="font-bold text-lg">{hashtag.displayName}</div>
-                            <div className="text-sm text-gray-300">{hashtag.count} posts</div>
+                            <div className="font-bold text-base md:text-lg">{hashtag.displayName}</div>
+                            <div className="text-xs md:text-sm text-gray-300">{hashtag.count} posts</div>
                         </button>
                     ))}
                 </div>
             </div>
 
             {/* Contenido TikTok REAL */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mb-6 md:mb-8">
                 {/* Panel Izquierdo - Enlaces Directos */}
-                <div className="bg-gray-900 rounded-2xl p-6">
-                    <h4 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <div className="bg-gray-900 rounded-2xl p-4 md:p-6">
+                    <h4 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 flex items-center gap-2">
                         🎯 Explorar en TikTok REAL
                     </h4>
-                    <div className="space-y-4">
+                    <div className="space-y-3 md:space-y-4">
                         {tiktokUrls.map((url, index) => (
-                            <div key={index} className="bg-gray-800 rounded-lg p-4">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <div className="font-semibold text-pink-400">
+                            <div key={index} className="bg-gray-800 rounded-lg p-3 md:p-4">
+                                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-0">
+                                    <div className="flex-1">
+                                        <div className="font-semibold text-pink-400 text-sm md:text-base">
                                             #{hashtags[index]?.tag || `${destination.name.toLowerCase()}${index + 1}`}
                                         </div>
-                                        <div className="text-sm text-gray-400">
+                                        <div className="text-xs md:text-sm text-gray-400">
                                             Ver videos reales de {destination.name}
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => window.open(url, '_blank')}
-                                        className="bg-gradient-to-r from-pink-500 to-purple-600 px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition-opacity"
+                                        className="bg-gradient-to-r from-pink-500 to-purple-600 px-3 md:px-4 py-2 rounded-lg text-sm md:text-base font-semibold hover:opacity-90 transition-opacity w-full md:w-auto"
                                     >
                                         Ver TikToks →
                                     </button>
@@ -153,11 +152,11 @@ function TikTokFeed({ destination }) {
                 </div>
 
                 {/* Panel Derecho - Guía de Búsqueda */}
-                <div className="bg-gray-900 rounded-2xl p-6">
-                    <h4 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                <div className="bg-gray-900 rounded-2xl p-4 md:p-6">
+                    <h4 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 flex items-center gap-2">
                         🔍 Qué Buscar para Sacar Intel
                     </h4>
-                    
+
                     {destination.id === 'albania' && (
                         <div className="space-y-3 text-sm">
                             <div className="bg-pink-900/30 p-3 rounded">
@@ -236,7 +235,7 @@ function TikTokFeed({ destination }) {
                 <p className="text-lg mb-6 text-white/90">
                     TikTok es donde está la información REAL. Los influencers locales, los precios actuales, las fiestas secretas, los lugares que están de moda AHORA.
                 </p>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div className="bg-white/10 rounded-lg p-4">
                         <div className="text-2xl mb-2">📱</div>

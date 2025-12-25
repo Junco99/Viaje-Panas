@@ -152,45 +152,45 @@ function App() {
         );
     }
 
-    // RENDER: Vista de votación - RESPONSIVE
+    // RENDER: Vista de votación
     return (
-        <div className="min-h-screen gradient-bg">
-            <div className="container-responsive py-6 md:py-8">
-                <div className="text-center text-white mb-6 md:mb-8">
-                    <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 md:gap-0">
-                        <div className="glass-effect-enhanced px-4 py-3 md:px-6 md:py-3 rounded-xl md:rounded-2xl">
-                            <p className="text-lg md:text-xl font-bold">
-                                {selectedUser?.emoji} {selectedUser?.name || 'Pana'}
+        <div className="min-h-screen gradient-bg text-slate-200 font-sans">
+            <div className="container-responsive py-8 md:py-12">
+                <div className="text-center mb-10 md:mb-16">
+                    <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
+                        <div className="bg-white px-5 py-3 rounded-2xl shadow-sm border border-slate-200">
+                            <p className="text-sm font-bold text-slate-900 tracking-tight">
+                                {selectedUser?.name}
                             </p>
-                            <p className="text-xs md:text-sm text-white/70">
-                                {selectedUser?.personality || 'Bienvenido'}
+                            <p className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mt-1">
+                                {selectedUser?.personality}
                             </p>
                         </div>
                         <button
                             onClick={logoutUser}
-                            className="btn-secondary-enhanced glass-effect-enhanced hover:bg-white/20 text-white px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl font-bold transition-all text-sm md:text-base"
+                            className="text-slate-400 hover:text-slate-600 font-bold transition-all text-[11px] uppercase tracking-widest"
                         >
-                            🔄 <span className="hidden sm:inline">Cambiar </span>Usuario
+                            Cambiar Usuario
                         </button>
                     </div>
 
-                    <h1 className="text-3xl md:text-6xl font-black mb-3 md:mb-4 drop-shadow-lg px-4">
-                        🌍 PANAS VIAJE 2026 🌍
+                    <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tight">
+                        Viaje Panas 2026
                     </h1>
-                    <p className="text-lg md:text-2xl mb-4 md:mb-6 text-white/90 px-4">
-                        Elige nuestro próximo destino épico
+                    <p className="text-lg md:text-xl text-slate-500 max-w-lg mx-auto">
+                        Selecciona el próximo destino para nuestra aventura.
                     </p>
 
                     {totalVotes > 0 && (
-                        <div className="flex flex-col items-center gap-4">
-                            <div className="glass-effect-enhanced inline-block px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl text-lg md:text-xl font-bold">
-                                📊 Total votos: {totalVotes}
+                        <div className="flex flex-col items-center gap-6 mt-8">
+                            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] border-b border-slate-200 pb-2">
+                                Participación: {totalVotes} votos
                             </div>
                             <button
                                 onClick={() => setCurrentView('ranking')}
-                                className="bg-yellow-400 hover:bg-yellow-300 text-black px-6 py-2 rounded-full font-black text-sm uppercase tracking-wider shadow-xl transition-all hover:scale-105 active:scale-95"
+                                className="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-3 rounded-full font-bold text-xs uppercase tracking-widest shadow-md transition-all"
                             >
-                                🏆 Ver Clasificación
+                                Ver Clasificación
                             </button>
                         </div>
                     )}
@@ -213,16 +213,19 @@ function App() {
                 </div>
 
                 {hasVoted && (
-                    <div className="text-center px-4">
+                    <div className="text-center mt-12">
                         <button
                             onClick={resetVotes}
-                            className="btn-secondary-enhanced glass-effect-enhanced hover:bg-red-500/50 text-white px-6 py-3 md:px-8 md:py-3 rounded-xl md:rounded-2xl font-bold transition-all text-sm md:text-base"
+                            className="text-slate-300 hover:text-red-400 transition-all text-[10px] font-bold uppercase tracking-widest"
                         >
-                            🗑️ <span className="hidden sm:inline">Resetear Votos (Admin)</span><span className="sm:hidden">Reset</span>
+                            Resetear Votos (Admin)
                         </button>
                     </div>
                 )}
             </div>
+
+            {/* Footer con políticas del grupo */}
+            <Footer />
         </div>
     );
 }

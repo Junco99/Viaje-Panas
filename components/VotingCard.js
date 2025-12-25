@@ -6,17 +6,19 @@ function VotingCard({ destination, votes, totalVotes, hasVoted, votedFor, onVote
 
     return (
         <div
-            className={`vote-card ${isUserVote ? 'voted' : ''} card-enhanced relative overflow-hidden rounded-xl md:rounded-2xl shadow-xl transition-all duration-300 hover:scale-105 mx-2 md:mx-0`}
+            className={`vote-card ${isUserVote ? 'voted' : ''} card-enhanced relative overflow-hidden rounded-3xl shadow-2xl transition-all duration-500 hover:scale-[1.03] mx-2 md:mx-0 group`}
             style={{
-                background: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${destination.image})`,
+                background: `linear-gradient(to bottom, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.9)), url(${destination.image})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                minHeight: '450px'
+                minHeight: '480px'
             }}
         >
+            {/* Overlay de brillo en hover */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             {isUserVote && (
-                <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-center py-2 font-bold text-xs md:text-sm z-10">
-                    ✓ HAS VOTADO ESTE DESTINO
+                <div className="absolute top-0 left-0 right-0 bg-slate-900 text-white text-center py-2 font-bold text-[10px] tracking-widest z-10 uppercase">
+                    Seleccionado por ti
                 </div>
             )}
 
@@ -24,62 +26,60 @@ function VotingCard({ destination, votes, totalVotes, hasVoted, votedFor, onVote
                 <div>
                     <div className="flex items-center justify-between mb-3">
                         <span className="text-3xl md:text-4xl font-bold drop-shadow-lg">{destination.flag}</span>
-                        {destination.bestFor && (
-                            <div className="flex gap-1 flex-wrap">
-                                {destination.bestFor.slice(0, 2).map(tag => (
-                                    <span key={tag} className="glass-effect-enhanced px-2 py-1 md:px-3 md:py-1 rounded-full text-xs font-semibold">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
+                        <div className="flex gap-1 flex-wrap">
+                            {destination.bestFor.slice(0, 2).map(tag => (
+                                <span key={tag} className="bg-white/10 backdrop-blur-md px-2 py-1 md:px-3 md:py-1 rounded text-[9px] font-bold uppercase tracking-wider text-white border border-white/20">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
                     </div>
 
                     <h3 className="text-2xl md:text-3xl font-bold mb-2 drop-shadow-lg">{destination.name}</h3>
                     <p className="text-base md:text-lg text-gray-100 mb-4 drop-shadow line-clamp-2">{destination.tagline}</p>
 
-                    <div className="space-y-2 text-xs md:text-sm">
-                        <div className="glass-effect-enhanced px-3 py-2 rounded-lg">
-                            <span className="font-bold">💰 </span>
-                            <span className="text-xs md:text-sm">{destination.price}</span>
+                    <div className="space-y-2">
+                        <div className="bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Estancia</span>
+                            <span className="text-[11px] font-bold">{destination.price}</span>
                         </div>
-                        <div className="glass-effect-enhanced px-3 py-2 rounded-lg">
-                            <span className="font-bold">✈️ </span>
-                            <span className="text-xs md:text-sm">{destination.flightData.airline} - {destination.flightData.duration}</span>
+                        <div className="bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">Vuelo</span>
+                            <span className="text-[11px] font-bold">{destination.flightData.airline}</span>
                         </div>
                     </div>
                 </div>
 
                 <div>
                     {hasVoted && (
-                        <div className="glass-effect-enhanced backdrop-blur rounded-lg md:rounded-xl p-3 md:p-4 mb-3">
+                        <div className="bg-black/40 backdrop-blur rounded-xl p-3 md:p-4 mb-3 border border-white/10">
                             <div className="flex justify-between items-center mb-2">
-                                <span className="text-base md:text-lg font-bold">{voteCount} votos</span>
-                                <span className="text-xl md:text-2xl font-bold">{votePercentage}%</span>
+                                <span className="text-sm font-bold tracking-tight">{voteCount} votos</span>
+                                <span className="text-lg font-black">{votePercentage}%</span>
                             </div>
-                            <div className="w-full bg-white/20 rounded-full h-2 md:h-3 overflow-hidden">
+                            <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
                                 <div
-                                    className="bg-gradient-to-r from-green-400 to-emerald-500 h-full rounded-full transition-all duration-500"
+                                    className="bg-white h-full rounded-full transition-all duration-500"
                                     style={{ width: `${votePercentage}%` }}
                                 />
                             </div>
                         </div>
                     )}
 
-                    <div className="flex gap-2 md:gap-3">
+                    <div className="flex gap-2">
                         <button
                             onClick={() => onViewDetails(destination)}
-                            className="btn-primary-enhanced flex-1 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-white px-3 py-2 md:px-4 md:py-3 rounded-lg md:rounded-xl font-black transition-all shadow-lg hover:shadow-xl text-xs md:text-sm border-none"
+                            className="flex-1 bg-white text-slate-900 px-4 py-2.5 rounded-lg font-bold transition-all hover:bg-slate-100 text-[11px] uppercase tracking-widest border-none"
                         >
-                            👁️ <span className="hidden sm:inline">Ver </span>Detalles
+                            Ver Detalles
                         </button>
 
                         {!hasVoted && (
                             <button
                                 onClick={() => onVote(destination.id)}
-                                className="btn-primary-enhanced flex-1 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-300 hover:to-orange-400 text-black px-3 py-2 md:px-4 md:py-3 rounded-lg md:rounded-xl font-black transition-all shadow-lg hover:shadow-xl badge-animate text-xs md:text-sm border-none"
+                                className="flex-1 bg-indigo-600 text-white px-4 py-2.5 rounded-lg font-bold transition-all hover:bg-indigo-700 text-[11px] uppercase tracking-widest border-none"
                             >
-                                🗳️ Votar
+                                Seleccionar
                             </button>
                         )}
                     </div>

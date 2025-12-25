@@ -145,7 +145,7 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
     log(`📊 Búsquedas este mes: ${monthlySearchCount}/${MAX_MONTHLY_SEARCHES}`, 'info');
 
     // Llamar a SerpAPI
-    const serpUrl = `https://serpapi.com/search.json?engine=google_flights&departure_id=MAD&arrival_id=${iataCode}&outbound_date=${dates.outbound}&return_date=${dates.return}&currency=EUR&hl=es&gl=es&adults=1&api_key=${SERPAPI_KEY}`;
+    const serpUrl = `https://serpapi.com/search.json?engine=google_flights&departure_id=MAD&arrival_id=${iataCode}&outbound_date=${dates.outbound}&return_date=${dates.return}&currency=EUR&hl=es&gl=es&adults=1&type=1&api_key=${SERPAPI_KEY}`;
 
     log(`🌐 Consultando SerpAPI...`, 'info');
     const response = await fetch(serpUrl);
@@ -170,30 +170,56 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
 
     // Formatear resultados para nuestro frontend
     const flights = data.best_flights.slice(0, 8).map((flight, index) => {
-      const firstLeg = flight.flights[0];
-      const lastLeg = flight.flights[flight.flights.length - 1];
+      // SerpAPI flatten segments in 'flights'. We need to split them by origin/destination.
+      const segments = flight.flights;
+
+      // Basic heuristic: the outbound leg ends when we reach the iataCode destination
+      let outboundSegments = [];
+      let returnSegments = [];
+      let foundReturn = false;
+
+      segments.forEach((seg, i) => {
+        if (!foundReturn) {
+          outboundSegments.push(seg);
+          // If this segment arrives at our destination airport, the next one (if any) starts return
+          if (seg.arrival_airport.id === iataCode) {
+            foundReturn = true;
+          }
+        } else {
+          returnSegments.push(seg);
+        }
+      });
+
+      // Validations and fallbacks
+      const firstOutbound = outboundSegments[0];
+      const lastOutbound = outboundSegments[outboundSegments.length - 1];
+      const firstReturn = returnSegments.length > 0 ? returnSegments[0] : null;
+      const lastReturn = returnSegments.length > 0 ? returnSegments[returnSegments.length - 1] : null;
 
       return {
         id: `serp_${destination}_${period}_${index}`,
         price: `€${flight.price}`,
         priceNumeric: flight.price,
         airline: {
-          name: firstLeg.airline || 'Aerolínea',
-          code: firstLeg.airline_logo ? firstLeg.airline.substring(0, 2).toUpperCase() : 'XX',
-          logo: firstLeg.airline_logo
+          name: firstOutbound.airline || 'Aerolínea',
+          code: firstOutbound.airline ? firstOutbound.airline.substring(0, 2).toUpperCase() : 'XX',
+          logo: firstOutbound.airline_logo
         },
-        departure: firstLeg.departure_airport.time,
-        arrival: lastLeg.arrival_airport.time,
-        duration: formatDuration(flight.duration || 0),
-        durationMinutes: parseInt(flight.duration) || 0,
+        // Ida
+        departure: firstOutbound.departure_airport.time,
+        arrival: lastOutbound.arrival_airport.time,
+        // Vuelta
+        returnDeparture: firstReturn ? firstReturn.departure_airport.time : null,
+        returnArrival: lastReturn ? lastReturn.arrival_airport.time : null,
+
+        durationMinutes: parseInt(flight.total_duration || flight.duration) || 0,
+        duration: formatDuration(flight.total_duration || flight.duration || 0),
         stops: flight.layovers ? flight.layovers.length : 0,
         stopsText: flight.layovers && flight.layovers.length > 0
-          ? `${flight.layovers.length} escala${flight.layovers.length > 1 ? 's' : ''}${flight.layovers[0]?.name ? ' · ' + flight.layovers[0].name : ''}`
+          ? `${flight.layovers.length} escala${flight.layovers.length > 1 ? 's' : ''}`
           : 'Directo',
-        stopoverCity: flight.layovers && flight.layovers[0] ? flight.layovers[0].name : '',
         originAirport: 'MAD',
         destAirport: iataCode,
-        carbonEmissions: flight.carbon_emissions?.this_flight || 0,
         bookingUrl: `https://www.google.com/travel/flights`,
         scraped: true,
         source: 'serpapi',

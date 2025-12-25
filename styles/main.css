@@ -12,7 +12,10 @@ body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -30,16 +33,14 @@ h1, h2, h3, h4 {
     }
 }
 
-/* === GRADIENT BACKGROUND - MÁS VIBRANTE === */
+/* === PROFESSIONAL BACKGROUND === */
 .gradient-bg {
-    background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB, #FF00CC, #3333FF);
-    background-size: 400% 400%;
-    animation: gradientShift 10s ease infinite;
-}
-
-@keyframes gradientShift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    background-color: #f8fafc;
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+    background-attachment: fixed;
 }
 
 .glass-effect {
@@ -54,7 +55,7 @@ h1, h2, h3, h4 {
 
 .info-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .badge-animate {
@@ -62,8 +63,15 @@ h1, h2, h3, h4 {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 .vote-card {
@@ -78,16 +86,23 @@ h1, h2, h3, h4 {
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+    background: #4f46e5;
+    /* indigo-600 */
     border-radius: 18px;
     opacity: 1;
-    animation: borderGlow 2s ease-in-out infinite;
     z-index: -1;
 }
 
 @keyframes borderGlow {
-    0%, 100% { filter: brightness(1); }
-    50% { filter: brightness(1.3); }
+
+    0%,
+    100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(1.3);
+    }
 }
 
 .tab-button {
@@ -102,7 +117,7 @@ h1, h2, h3, h4 {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: #4f46e5;
     border-radius: 2px;
 }
 
@@ -110,13 +125,13 @@ h1, h2, h3, h4 {
     position: relative;
     overflow: hidden;
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 .lightbox {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.95);
+    background: rgba(0, 0, 0, 0.95);
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -125,8 +140,13 @@ h1, h2, h3, h4 {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .video-container {
@@ -135,7 +155,7 @@ h1, h2, h3, h4 {
     height: 0;
     overflow: hidden;
     border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 .video-container iframe {
@@ -150,7 +170,7 @@ h1, h2, h3, h4 {
 .star {
     color: #FCD34D;
     font-size: 1.2rem;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .timeline-item {
@@ -177,7 +197,7 @@ h1, h2, h3, h4 {
     height: 24px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea, #764ba2);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* === ESTILOS PARA COMPONENTES DE MEDIOS === */
@@ -192,7 +212,7 @@ h1, h2, h3, h4 {
 
 .image-gallery-item:hover {
     transform: scale(1.02);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 /* Video Gallery */
@@ -204,7 +224,7 @@ h1, h2, h3, h4 {
 
 .video-thumbnail:hover {
     transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* Modal Styles */
@@ -224,8 +244,13 @@ h1, h2, h3, h4 {
 }
 
 @keyframes modalFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* TikTok Special Styling */
@@ -236,42 +261,50 @@ h1, h2, h3, h4 {
 }
 
 @keyframes tiktokGradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 /* === RESPONSIVE DESIGN === */
 
 /* Mobile First Approach */
 @media (max-width: 640px) {
+
     /* Hero Section Mobile */
     .hero-mobile {
         height: 60vh !important;
         min-height: 400px;
     }
-    
+
     .hero-content-mobile {
         padding: 20px 16px !important;
         text-align: center;
     }
-    
+
     .hero-title-mobile {
         font-size: 2rem !important;
         line-height: 1.1;
         margin-bottom: 12px;
     }
-    
+
     .hero-subtitle-mobile {
         font-size: 1.1rem !important;
         margin-bottom: 16px;
     }
-    
+
     .hero-description-mobile {
         font-size: 0.95rem !important;
         margin-bottom: 20px;
         line-height: 1.4;
     }
-    
+
     /* Price Box Mobile */
     .price-box-mobile {
         position: relative !important;
@@ -280,34 +313,34 @@ h1, h2, h3, h4 {
         margin: 20px 16px 0 16px;
         padding: 16px !important;
     }
-    
+
     .price-box-mobile .text-4xl {
         font-size: 1.8rem !important;
     }
-    
+
     /* Cards Grid Mobile */
     .cards-grid-mobile {
         grid-template-columns: 1fr !important;
         gap: 16px !important;
     }
-    
+
     .card-mobile {
         padding: 20px !important;
         margin: 0 8px;
     }
-    
+
     /* Itinerary Mobile */
     .itinerary-mobile {
         margin: 20px 8px !important;
         padding: 20px 16px !important;
     }
-    
+
     .itinerary-title-mobile {
         font-size: 1.8rem !important;
         text-align: center;
         margin-bottom: 20px;
     }
-    
+
     /* Tabs Mobile */
     .tabs-mobile {
         overflow-x: auto;
@@ -315,25 +348,25 @@ h1, h2, h3, h4 {
         scrollbar-width: none;
         -ms-overflow-style: none;
     }
-    
+
     .tabs-mobile::-webkit-scrollbar {
         display: none;
     }
-    
+
     .tab-button-mobile {
         font-size: 0.85rem !important;
         padding: 8px 12px !important;
         white-space: nowrap;
         min-width: auto;
     }
-    
+
     /* Tab Content Mobile */
     .tab-content-mobile {
         padding: 16px !important;
         margin: 0 8px;
         border-radius: 16px;
     }
-    
+
     /* Button Mobile */
     .btn-mobile {
         padding: 12px 20px !important;
@@ -341,16 +374,16 @@ h1, h2, h3, h4 {
         width: 100%;
         margin: 8px 0;
     }
-    
+
     /* Text Sizing Mobile */
     .text-mobile-lg {
         font-size: 1.1rem !important;
     }
-    
+
     .text-mobile-base {
         font-size: 0.9rem !important;
     }
-    
+
     .text-mobile-sm {
         font-size: 0.8rem !important;
     }
@@ -361,17 +394,17 @@ h1, h2, h3, h4 {
     .hero-tablet {
         height: 70vh;
     }
-    
+
     .cards-grid-tablet {
         grid-template-columns: 1fr 1fr !important;
         gap: 20px;
     }
-    
+
     .itinerary-tablet {
         margin: 30px 16px;
         padding: 32px 24px;
     }
-    
+
     .tab-content-tablet {
         padding: 24px;
     }
@@ -397,7 +430,7 @@ h1, h2, h3, h4 {
     .hide-mobile {
         display: none !important;
     }
-    
+
     .show-mobile {
         display: block !important;
     }
@@ -408,24 +441,24 @@ h1, h2, h3, h4 {
     .mb-mobile-4 {
         margin-bottom: 16px !important;
     }
-    
+
     .mb-mobile-6 {
         margin-bottom: 24px !important;
     }
-    
+
     .mb-mobile-8 {
         margin-bottom: 32px !important;
     }
-    
+
     .p-mobile-4 {
         padding: 16px !important;
     }
-    
+
     .px-mobile-4 {
         padding-left: 16px !important;
         padding-right: 16px !important;
     }
-    
+
     .py-mobile-4 {
         padding-top: 16px !important;
         padding-bottom: 16px !important;
@@ -434,32 +467,36 @@ h1, h2, h3, h4 {
 
 /* === IMPROVED COMPONENT STYLES === */
 
-/* Better Glass Effect - Más contrastado */
+/* Better Glass Effect - Más contrastado y legible */
 .glass-effect-enhanced {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(25px) saturate(180%);
     -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border: 1.5px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
 }
 
 /* Enhanced Cards */
 .card-enhanced {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 24px;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .card-enhanced:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.25);
 }
 
 /* Better Button Styles - Colores saturados */
 .btn-primary-enhanced {
-    background: linear-gradient(135deg, #FF00CC 0%, #3333FF 100%);
+    background: #4f46e5;
     color: white;
     border: none;
     padding: 14px 28px;
@@ -470,7 +507,7 @@ h1, h2, h3, h4 {
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 8px 20px rgba(255, 0, 204, 0.4);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
 }
 
 .btn-primary-enhanced:hover {
@@ -504,13 +541,13 @@ h1, h2, h3, h4 {
         grid-template-columns: 1fr !important;
         gap: 16px !important;
     }
-    
+
     .tiktok-hashtag-buttons {
         flex-wrap: wrap;
         gap: 8px !important;
         justify-content: center;
     }
-    
+
     .tiktok-hashtag-button {
         font-size: 12px !important;
         padding: 6px 12px !important;
@@ -523,11 +560,11 @@ h1, h2, h3, h4 {
         padding: 16px !important;
         margin: 8px 0 !important;
     }
-    
+
     .itinerary-time {
         font-size: 14px !important;
     }
-    
+
     .itinerary-activity {
         font-size: 16px !important;
         margin-bottom: 8px !important;
@@ -540,7 +577,7 @@ h1, h2, h3, h4 {
         grid-template-columns: 1fr 1fr !important;
         gap: 8px !important;
     }
-    
+
     .image-gallery-large {
         grid-template-columns: 1fr !important;
     }
@@ -552,11 +589,11 @@ h1, h2, h3, h4 {
         padding: 16px !important;
         margin: 8px 0 !important;
     }
-    
+
     .flight-price {
         font-size: 18px !important;
     }
-    
+
     .flight-details {
         font-size: 12px !important;
     }
@@ -564,14 +601,16 @@ h1, h2, h3, h4 {
 
 /* Fix para overflow horizontal */
 @media (max-width: 640px) {
-    body, html {
+
+    body,
+    html {
         overflow-x: hidden !important;
     }
-    
+
     * {
         max-width: 100vw !important;
     }
-    
+
     .container-responsive {
         max-width: 100% !important;
         overflow-x: hidden;
@@ -584,12 +623,12 @@ h1, h2, h3, h4 {
         margin: 20px 0 !important;
         padding: 0 8px !important;
     }
-    
+
     .card-spacing {
         margin: 12px 0 !important;
         padding: 16px !important;
     }
-    
+
     .text-spacing {
         line-height: 1.4 !important;
         margin-bottom: 12px !important;
@@ -598,12 +637,14 @@ h1, h2, h3, h4 {
 
 /* Touch targets mejorados para móvil */
 @media (max-width: 640px) {
-    button, .clickable {
+
+    button,
+    .clickable {
         min-height: 44px !important;
         min-width: 44px !important;
         touch-action: manipulation;
     }
-    
+
     .btn-touch {
         padding: 12px 16px !important;
         font-size: 16px !important;
@@ -615,7 +656,7 @@ h1, h2, h3, h4 {
     * {
         transition-duration: 0.2s !important;
     }
-    
+
     .hover-effect:hover {
         transform: scale(1.02) !important;
     }
@@ -628,7 +669,7 @@ h1, h2, h3, h4 {
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
     }
-    
+
     .card-enhanced {
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(8px);

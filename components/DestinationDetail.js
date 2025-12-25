@@ -1,27 +1,29 @@
 // Componente: Vista Detallada del Destino - REORGANIZADO
 function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onLoadPrices }) {
     const [activeTab, setActiveTab] = React.useState('overview');
-    
+
     // Cargar precios cuando se entra en tab vuelos
     React.useEffect(() => {
         if (activeTab === 'flights' && destination.id) {
             onLoadPrices(destination.id);
         }
     }, [activeTab, destination.id]);
-    
+
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-slate-900 overflow-x-hidden">
             {/* Header Hero - RESPONSIVE */}
             <div className="relative h-96 hero-mobile hero-tablet overflow-hidden">
-                <div 
-                    className="absolute inset-0"
+                <div
+                    className="absolute inset-x-0 top-0 h-full"
                     style={{
-                        background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(${destination.image})`,
+                        backgroundImage: `url(${destination.image})`,
                         backgroundSize: 'cover',
-                        backgroundPosition: 'center'
+                        backgroundPosition: 'center',
+                        filter: 'blur(30px) brightness(0.3)'
                     }}
                 />
-                
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/50 to-slate-900"></div>
+
                 <div className="relative container-responsive hero-content-mobile h-full flex flex-col justify-center">
                     <div className="text-white">
                         <button
@@ -30,7 +32,7 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                         >
                             ← Volver
                         </button>
-                        
+
                         {/* Mobile: Stack flag and content, Desktop: Side by side */}
                         <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
                             <span className="text-4xl md:text-6xl mx-auto md:mx-0">{destination.flag}</span>
@@ -39,19 +41,19 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                                 <p className="text-lg md:text-2xl text-gray-200 hero-subtitle-mobile">{destination.tagline}</p>
                             </div>
                         </div>
-                        
+
                         <p className="text-base md:text-xl text-gray-100 mb-6 max-w-2xl mx-auto md:mx-0 text-center md:text-left hero-description-mobile">{destination.description}</p>
-                        
+
                         <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
                             {destination.bestFor && destination.bestFor.map(tag => (
-                                <span key={tag} className="glass-effect-enhanced px-3 py-1 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold">
-                                    ✨ {tag}
+                                <span key={tag} className="glass-effect-enhanced px-3 py-1 md:px-4 md:py-2 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider">
+                                    {tag}
                                 </span>
                             ))}
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Price Box - Responsive positioning */}
                 <div className="absolute top-6 right-6 hide-mobile">
                     <div className="glass-effect-enhanced backdrop-blur-md px-6 py-4 rounded-2xl text-center border-2 border-white/30">
@@ -60,7 +62,7 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                         <div className="text-xs text-gray-300 mt-1">por persona</div>
                     </div>
                 </div>
-                
+
                 {/* Price Box Mobile - At bottom */}
                 <div className="show-mobile price-box-mobile">
                     <div className="glass-effect-enhanced backdrop-blur-md p-4 rounded-2xl text-center border-2 border-white/30">
@@ -70,61 +72,54 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                     </div>
                 </div>
             </div>
-            
+
             {/* Content - RESPONSIVE */}
             <div className="container-responsive py-8 md:py-12">
-                
+
                 {/* 🔥 1. ITINERARIO PRINCIPAL - MEJORADO Y RESPONSIVE */}
                 <div className="mb-8 md:mb-12 relative itinerary-mobile itinerary-tablet">
-                    {/* Fondo decorativo */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-2xl md:rounded-3xl blur-2xl md:blur-3xl -z-10"></div>
-                    
-                    <div className="card-enhanced bg-gradient-to-br from-white via-blue-50/50 to-purple-50/50 rounded-2xl md:rounded-3xl shadow-2xl p-4 md:p-8 border-2 md:border-4 border-blue-200/50 backdrop-blur-sm">
-                        {/* Header épico del itinerario - RESPONSIVE */}
+                    <div className="bg-white rounded-2xl md:rounded-3xl shadow-sm p-4 md:p-8 border border-slate-200">
+                        {/* Header del itinerario */}
                         <div className="text-center mb-6 md:mb-8">
-                            <div className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 md:px-6 md:py-2 rounded-full text-xs md:text-sm font-black mb-3 md:mb-4 badge-animate">
-                                ⭐ TU PLAN DE VIAJE
+                            <div className="inline-block bg-slate-900 text-white px-4 py-1.5 rounded-full text-[10px] font-bold mb-4 tracking-widest uppercase">
+                                Itinerario Recomendado
                             </div>
-                            <h2 className="text-2xl md:text-4xl font-black text-gray-900 mb-2 md:mb-3 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 itinerary-title-mobile">
-                                <span className="text-3xl md:text-5xl">{destination.flag}</span>
-                                <span className="text-center">Itinerario 5 Días Completo</span>
+                            <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-2 md:mb-3 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3">
+                                <span>{destination.flag}</span>
+                                <span className="text-center">Plan de 5 Días</span>
                             </h2>
-                            <p className="text-base md:text-lg text-gray-600 px-4 md:px-0">
-                                Tu aventura épica en {destination.name} día a día
+                            <p className="text-base md:text-lg text-slate-500 max-w-xl mx-auto">
+                                Una ruta optimizada para descubrir lo mejor de {destination.name}
                             </p>
                         </div>
-                        
+
                         {/* Componente itinerario */}
                         <ItineraryPlanner destination={destination} />
-                        
-                        {/* Footer info itinerario - RESPONSIVE */}
-                        <div className="mt-6 md:mt-8 bg-white/80 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border-2 border-blue-200">
+
+                        {/* Footer info itinerario */}
+                        <div className="mt-6 md:mt-8 bg-slate-50 rounded-xl md:rounded-2xl p-4 md:p-6 border border-slate-200">
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <div className="flex items-start md:items-center gap-3">
-                                    <span className="text-2xl md:text-3xl">💡</span>
+                                    <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">i</div>
                                     <div>
-                                        <h4 className="font-black text-gray-900 text-sm md:text-base">Todos los horarios son flexibles</h4>
-                                        <p className="text-xs md:text-sm text-gray-600">Adapta el plan a tu ritmo - esto es solo una guía</p>
+                                        <h4 className="font-bold text-slate-900 text-sm md:text-base">Horarios flexibles</h4>
+                                        <p className="text-xs md:text-sm text-slate-500">Este plan es una propuesta personalizable según tus preferencias.</p>
                                     </div>
                                 </div>
-                                <div className="bg-green-100 text-green-800 px-3 py-2 md:px-4 md:py-2 rounded-full font-bold text-xs md:text-sm text-center">
-                                    ✅ Itinerario verificado y real
+                                <div className="text-indigo-600 font-bold text-xs md:text-sm text-center uppercase tracking-widest">
+                                    Ruta Verificada
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                {/* 2. RESUMEN DEL VIAJE - MEJORADO Y RESPONSIVE */}
+
                 <div className="mb-8 md:mb-12 px-2 md:px-0">
-                    <div className="text-center mb-4 md:mb-6">
-                        <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2 flex items-center justify-center gap-2 md:gap-3">
-                            <span>📋</span>
-                            Resumen del Viaje
-                        </h2>
-                        <p className="text-gray-600 text-sm md:text-base">Info esencial para planificar</p>
+                    <div className="text-center mb-6 md:mb-8">
+                        <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">Información Esencial</h2>
+                        <p className="text-slate-500 text-sm md:text-base">Datos clave para tu planificación</p>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 cards-grid-mobile cards-grid-tablet">
                         {/* Card Clima - RESPONSIVE */}
                         <div className="card-enhanced bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-all card-mobile">
@@ -134,20 +129,20 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                             </h3>
                             <div className="space-y-2 md:space-y-3">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-gray-600 text-sm md:text-base">Temperatura:</span>
-                                    <span className="font-bold text-base md:text-lg">{destination.weather.temp}</span>
+                                    <span className="text-gray-800 text-sm md:text-base font-medium">Temperatura:</span>
+                                    <span className="font-bold text-base md:text-lg text-gray-900">{destination.weather.temp}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-gray-600 text-sm md:text-base">Sol:</span>
-                                    <span className="font-bold text-sm md:text-base">{destination.weather.sun}</span>
+                                    <span className="text-gray-800 text-sm md:text-base font-medium">Sol:</span>
+                                    <span className="font-bold text-sm md:text-base text-gray-900">{destination.weather.sun}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-gray-600 text-sm md:text-base">Lluvia:</span>
-                                    <span className="font-bold text-sm md:text-base">{destination.weather.rain}</span>
+                                    <span className="text-gray-800 text-sm md:text-base font-medium">Lluvia:</span>
+                                    <span className="font-bold text-sm md:text-base text-gray-900">{destination.weather.rain}</span>
                                 </div>
                             </div>
                         </div>
-                        
+
                         {/* Card Presupuesto - RESPONSIVE */}
                         <div className="card-enhanced bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-all card-mobile">
                             <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
@@ -156,12 +151,12 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                             </h3>
                             <div className="space-y-2 md:space-y-3">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-gray-600 text-sm md:text-base">Vuelos:</span>
-                                    <span className="font-bold text-sm md:text-base">{destination.flightData.price}</span>
+                                    <span className="text-gray-800 text-sm md:text-base font-medium">Vuelos:</span>
+                                    <span className="font-bold text-sm md:text-base text-gray-900">{destination.flightData.price}</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-gray-600 text-sm md:text-base">Estancia (5 días):</span>
-                                    <span className="font-bold text-sm md:text-base">{destination.price}</span>
+                                    <span className="text-gray-800 text-sm md:text-base font-medium">Estancia (5 días):</span>
+                                    <span className="font-bold text-sm md:text-base text-gray-900">{destination.price}</span>
                                 </div>
                                 <div className="pt-2 md:pt-3 border-t border-gray-200">
                                     <div className="flex justify-between items-center">
@@ -172,29 +167,26 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                                     </div>
                                 </div>
                             </div>
-                            <div className="text-xs text-gray-500 mt-2 md:mt-3">* Precios por persona, vuelo + estancia</div>
+                            <div className="text-xs text-gray-700 mt-2 md:mt-3 font-medium">* Precios por persona, vuelo + estancia</div>
                         </div>
-                        
+
                         {/* Card Vibe - RESPONSIVE */}
-                        <div className="card-enhanced bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6 hover:shadow-xl transition-all card-mobile">
-                            <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-3 md:mb-4 flex items-center gap-2">
-                                <span>✨</span>
-                                <span className="text-mobile-base">El Vibe</span>
-                            </h3>
-                            <p className="text-gray-700 leading-relaxed mb-3 md:mb-4 text-sm md:text-base">
-                                {destination.description}
+                        <div className="bg-white rounded-xl md:rounded-2xl shadow-sm p-4 md:p-6 border border-slate-200 card-mobile">
+                            <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-3 md:mb-4 uppercase tracking-widest text-[11px] text-slate-400">Atmósfera</h3>
+                            <p className="text-slate-700 leading-relaxed mb-3 md:mb-4 text-sm md:text-base italic">
+                                "{destination.description}"
                             </p>
                             <div className="flex flex-wrap gap-2">
                                 {destination.bestFor && destination.bestFor.map(tag => (
-                                    <span key={tag} className="bg-white text-gray-700 px-2 py-1 md:px-3 md:py-1 rounded-full text-xs font-semibold shadow">
-                                        ✨ {tag}
+                                    <span key={tag} className="bg-slate-100 text-slate-600 px-2 py-1 rounded text-[10px] font-bold uppercase">
+                                        {tag}
                                     </span>
                                 ))}
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 {/* 3. TABS - COMPLETAMENTE RESPONSIVE */}
                 <div className="mb-6 md:mb-8 px-2 md:px-0">
                     <div className="text-center mb-4 md:mb-6">
@@ -204,9 +196,9 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                         </h2>
                         <p className="text-gray-600 text-sm md:text-base">Explora fotos, videos y más info</p>
                     </div>
-                    
+
                     {/* Tabs navegación - RESPONSIVE */}
-                 {/* Tabs navegación - ARREGLADO para móvil */}
+                    {/* Tabs navegación - ARREGLADO para móvil */}
                     <div className="border-b border-gray-200 mb-6 overflow-x-auto">
                         <div className="flex gap-2 min-w-max px-2">
                             {[
@@ -219,11 +211,10 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                                 <button
                                     key={id}
                                     onClick={() => setActiveTab(id)}
-                                    className={`pb-3 px-3 text-sm font-bold transition-all whitespace-nowrap ${
-                                        activeTab === id 
-                                            ? 'text-blue-600 border-b-4 border-blue-600' 
-                                            : 'text-gray-600 hover:text-gray-900 border-b-4 border-transparent'
-                                    }`}
+                                    className={`pb-3 px-3 text-sm font-bold transition-all whitespace-nowrap ${activeTab === id
+                                        ? 'text-blue-600 border-b-4 border-blue-600'
+                                        : 'text-gray-600 hover:text-gray-900 border-b-4 border-transparent'
+                                        }`}
                                 >
                                     <span className="block sm:hidden">{icon}</span>
                                     <span className="hidden sm:block">{icon} {label}</span>
@@ -231,52 +222,52 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                             ))}
                         </div>
                     </div>
-                    
+
                     {/* Tab Content - RESPONSIVE */}
                     <div className="card-enhanced bg-white rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6 tab-content-mobile tab-content-tablet">{activeTab === 'overview' && (
-                            <div className="space-y-4 md:space-y-6">
-                                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg md:rounded-xl p-4 md:p-6">
-                                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">
-                                        Por qué {destination.name} es perfecto para ti
-                                    </h3>
-                                    <p className="text-gray-700 text-base md:text-lg leading-relaxed">
-                                        {destination.description}
-                                    </p>
+                        <div className="space-y-4 md:space-y-6">
+                            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg md:rounded-xl p-4 md:p-6">
+                                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">
+                                    Por qué {destination.name} es perfecto para ti
+                                </h3>
+                                <p className="text-gray-700 text-base md:text-lg leading-relaxed">
+                                    {destination.description}
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                <div className="bg-green-50 rounded-lg md:rounded-xl p-4 md:p-6">
+                                    <h4 className="font-bold text-green-900 mb-3 flex items-center gap-2 text-sm md:text-base">
+                                        <span>✅</span>
+                                        Lo mejor del destino
+                                    </h4>
+                                    <ul className="space-y-2 text-gray-700 text-sm md:text-base">
+                                        {destination.highlights && destination.highlights.slice(0, 3).map((h, i) => (
+                                            <li key={i} className="flex items-start gap-2">
+                                                <span>{h.icon}</span>
+                                                <span><strong>{h.title}:</strong> {h.desc}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                                    <div className="bg-green-50 rounded-lg md:rounded-xl p-4 md:p-6">
-                                        <h4 className="font-bold text-green-900 mb-3 flex items-center gap-2 text-sm md:text-base">
-                                            <span>✅</span>
-                                            Lo mejor del destino
-                                        </h4>
-                                        <ul className="space-y-2 text-gray-700 text-sm md:text-base">
-                                            {destination.highlights && destination.highlights.slice(0, 3).map((h, i) => (
-                                                <li key={i} className="flex items-start gap-2">
-                                                    <span>{h.icon}</span>
-                                                    <span><strong>{h.title}:</strong> {h.desc}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                    
-                                    <div className="bg-blue-50 rounded-lg md:rounded-xl p-4 md:p-6">
-                                        <h4 className="font-bold text-blue-900 mb-3 flex items-center gap-2 text-sm md:text-base">
-                                            <span>📌</span>
-                                            Tags del viaje
-                                        </h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {destination.bestFor && destination.bestFor.map(tag => (
-                                                <span key={tag} className="bg-white text-gray-700 px-3 py-1 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-bold shadow-sm">
-                                                    ✨ {tag}
-                                                </span>
-                                            ))}
-                                        </div>
+
+                                <div className="bg-blue-50 rounded-lg md:rounded-xl p-4 md:p-6">
+                                    <h4 className="font-bold text-blue-900 mb-3 flex items-center gap-2 text-sm md:text-base">
+                                        <span>📌</span>
+                                        Tags del viaje
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {destination.bestFor && destination.bestFor.map(tag => (
+                                            <span key={tag} className="bg-white text-gray-700 px-3 py-1 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-bold shadow-sm">
+                                                ✨ {tag}
+                                            </span>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
-                        )}
-                        
+                        </div>
+                    )}
+
                         {activeTab === 'highlights' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                                 {destination.highlights.map((highlight, index) => (
@@ -288,7 +279,7 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                                 ))}
                             </div>
                         )}
-                        
+
                         {activeTab === 'images' && (
                             <div>
                                 <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6 flex items-center gap-2">
@@ -301,15 +292,15 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                                 </p>
                             </div>
                         )}
-                        
+
                         {activeTab === 'tiktok' && (
                             <div className="-m-4 md:-m-6">
                                 <TikTokFeed destination={destination} />
                             </div>
                         )}
-                        
+
                         {activeTab === 'flights' && (
-                            <FlightsTab 
+                            <FlightsTab
                                 destination={destination}
                                 realPrices={realPrices}
                                 loadingPrices={loadingPrices}
