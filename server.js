@@ -11,6 +11,31 @@ let monthlySearchCount = 0;
 const MAX_MONTHLY_SEARCHES = 95; // Límite de seguridad (100 gratis - 5 de margen)
 
 // ============================================
+// RATE LIMITING MOCK (Simple implementation)
+// ============================================
+const requestCounts = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minuto
+const MAX_REQUESTS_PER_WINDOW = 30;
+
+const rateLimiter = (req, res, next) => {
+  const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+  const now = Date.now();
+  const userRequests = requestCounts.get(ip) || [];
+
+  // Clean old requests
+  const recentRequests = userRequests.filter(timestamp => now - timestamp < RATE_LIMIT_WINDOW);
+
+  if (recentRequests.length >= MAX_REQUESTS_PER_WINDOW) {
+    log(`🚫 Rate limit alcanzado para IP: ${ip}`, 'warning');
+    return res.status(429).json({ error: 'Demasiadas peticiones. Inténtalo de nuevo en un minuto.' });
+  }
+
+  recentRequests.push(now);
+  requestCounts.set(ip, recentRequests);
+  next();
+};
+
+// ============================================
 // LOGGER
 // ============================================
 const log = (message, level = 'info') => {
@@ -21,7 +46,7 @@ const log = (message, level = 'info') => {
     'warning': '⚠️',
     'error': '❌'
   }[level] || 'ℹ️';
-  
+
   console.log(`${emoji} [${timestamp}] ${message}`);
 };
 
@@ -29,6 +54,31 @@ const log = (message, level = 'info') => {
 // MIDDLEWARE
 // ============================================
 app.use(express.json());
+
+// Basic security headers middleware
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('Content-Security-Policy', "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://www.youtube.com https://www.tiktok.com;");
+  next();
+});
+
+// Proteger archivos sensibles y servir estáticos
+app.use((req, res, next) => {
+  // Proteger archivos que empiezan por punto o el propio server.js
+  const forbidden = ['.git', '.env', 'package.json', 'package-lock.json', 'server.js'];
+  if (req.url.split('/').some(part => forbidden.includes(part) || part.startsWith('.'))) {
+    log(`🛡️ Intento de acceso bloqueado: ${req.url}`, 'warning');
+    return res.status(403).send('Acceso denegado');
+  }
+  next();
+});
+
+// Aplicar rate limiting a la API
+app.use('/api/', rateLimiter);
+
 app.use(express.static(path.join(__dirname)));
 
 // ============================================
@@ -42,7 +92,7 @@ app.get('/', (req, res) => {
 // ENDPOINT: Health check
 // ============================================
 app.get('/api/health', (req, res) => {
-  res.json({ 
+  res.json({
     status: 'ok',
     searchCount: monthlySearchCount,
     maxSearches: MAX_MONTHLY_SEARCHES,
@@ -56,9 +106,9 @@ app.get('/api/health', (req, res) => {
 // ============================================
 app.get('/api/flights/:destination/:period', async (req, res) => {
   const { destination, period } = req.params;
-  
+
   log(`🔍 Solicitando vuelos para ${destination} (${period})`, 'info');
-  
+
   // Mapeo de destinos a códigos IATA
   const destCodes = {
     'albania': 'TIA',
@@ -67,62 +117,62 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
     'malta': 'MLA',
     'norway': 'BGO'
   };
-  
+
   // Mapeo de periodos a fechas
   const periodDates = {
     '5al9': { outbound: '2026-08-05', return: '2026-08-09' },
     '12al16': { outbound: '2026-08-12', return: '2026-08-16' },
     '19al23': { outbound: '2026-08-19', return: '2026-08-23' }
   };
-  
+
   const iataCode = destCodes[destination];
   const dates = periodDates[period] || periodDates['5al9'];
-  
+
   if (!iataCode) {
     log(`❌ Destino no válido: ${destination}`, 'error');
     return res.status(400).json({ error: 'Destino no válido' });
   }
-  
+
   // PROTECCIÓN: Verificar límite mensual
   if (monthlySearchCount >= MAX_MONTHLY_SEARCHES) {
     log(`⚠️ Límite mensual alcanzado (${monthlySearchCount}/${MAX_MONTHLY_SEARCHES}). Usando datos mock.`, 'warning');
     return res.json(getMockFlightData(destination));
   }
-  
+
   try {
     // Incrementar contador
     monthlySearchCount++;
     log(`📊 Búsquedas este mes: ${monthlySearchCount}/${MAX_MONTHLY_SEARCHES}`, 'info');
-    
+
     // Llamar a SerpAPI
     const serpUrl = `https://serpapi.com/search.json?engine=google_flights&departure_id=MAD&arrival_id=${iataCode}&outbound_date=${dates.outbound}&return_date=${dates.return}&currency=EUR&hl=es&gl=es&adults=1&api_key=${SERPAPI_KEY}`;
-    
+
     log(`🌐 Consultando SerpAPI...`, 'info');
     const response = await fetch(serpUrl);
-    
+
     if (!response.ok) {
       throw new Error(`SerpAPI error: ${response.status} ${response.statusText}`);
     }
-    
+
     const data = await response.json();
-    
+
     // Verificar si hay error en la respuesta
     if (data.error) {
       throw new Error(`SerpAPI error: ${data.error}`);
     }
-    
+
     // Verificar si hay resultados
     if (!data.best_flights || data.best_flights.length === 0) {
       log(`⚠️ No se encontraron vuelos en SerpAPI, usando mock`, 'warning');
       monthlySearchCount--; // Revertir contador
       return res.json(getMockFlightData(destination));
     }
-    
+
     // Formatear resultados para nuestro frontend
     const flights = data.best_flights.slice(0, 8).map((flight, index) => {
       const firstLeg = flight.flights[0];
       const lastLeg = flight.flights[flight.flights.length - 1];
-      
+
       return {
         id: `serp_${destination}_${period}_${index}`,
         price: `€${flight.price}`,
@@ -134,10 +184,10 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
         },
         departure: firstLeg.departure_airport.time,
         arrival: lastLeg.arrival_airport.time,
-        duration: formatDuration(flight.duration),
-        durationMinutes: flight.duration,
+        duration: formatDuration(flight.duration || 0),
+        durationMinutes: parseInt(flight.duration) || 0,
         stops: flight.layovers ? flight.layovers.length : 0,
-        stopsText: flight.layovers && flight.layovers.length > 0 
+        stopsText: flight.layovers && flight.layovers.length > 0
           ? `${flight.layovers.length} escala${flight.layovers.length > 1 ? 's' : ''}${flight.layovers[0]?.name ? ' · ' + flight.layovers[0].name : ''}`
           : 'Directo',
         stopoverCity: flight.layovers && flight.layovers[0] ? flight.layovers[0].name : '',
@@ -150,9 +200,9 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
         scrapedAt: new Date().toISOString()
       };
     });
-    
+
     log(`✅ ${flights.length} vuelos obtenidos de SerpAPI`, 'success');
-    
+
     res.json({
       flights: flights,
       source: 'serpapi',
@@ -160,11 +210,11 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
       remaining: MAX_MONTHLY_SEARCHES - monthlySearchCount,
       timestamp: new Date().toISOString()
     });
-    
+
   } catch (error) {
     log(`❌ Error consultando SerpAPI: ${error.message}`, 'error');
     monthlySearchCount--; // Revertir contador si falló
-    
+
     // Fallback a datos mock
     log(`🎭 Usando datos mock como fallback`, 'info');
     res.json(getMockFlightData(destination));
@@ -177,9 +227,14 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
 
 // Formatear duración de minutos a "Xh Ym"
 function formatDuration(minutes) {
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return `${hours}h ${mins}m`;
+  const mins = parseInt(minutes);
+  if (isNaN(mins) || mins <= 0) return 'Derr. desc.';
+
+  const hours = Math.floor(mins / 60);
+  const remainingMins = mins % 60;
+
+  if (hours === 0) return `${remainingMins}m`;
+  return `${hours}h ${remainingMins}m`;
 }
 
 // Obtener datos mock como fallback
@@ -191,9 +246,9 @@ function getMockFlightData(destination) {
     'malta': { base: 145, airline: 'Ryanair', duration: 150, iata: 'MLA' },
     'norway': { base: 234, airline: 'SAS', duration: 165, iata: 'BGO' }
   };
-  
+
   const mock = mockPrices[destination] || mockPrices['albania'];
-  
+
   return {
     flights: [
       {
@@ -259,6 +314,6 @@ function getMockFlightData(destination) {
 app.listen(PORT, () => {
   log(`🚀 Servidor corriendo en http://localhost:${PORT}`, 'success');
   log(`📊 Límite mensual: ${MAX_MONTHLY_SEARCHES} búsquedas`, 'info');
-  log(`🔑 API Key configurada: ${SERPAPI_KEY === 'e82b214fc0f08ed8715317c6a8c60ad421ed438a7b6e84df2a80bc5205973464' ? '❌ NO' : '✅ SÍ'}`, 
+  log(`🔑 API Key configurada: ${SERPAPI_KEY === 'e82b214fc0f08ed8715317c6a8c60ad421ed438a7b6e84df2a80bc5205973464' ? '❌ NO' : '✅ SÍ'}`,
     SERPAPI_KEY === 'e82b214fc0f08ed8715317c6a8c60ad421ed438a7b6e84df2a80bc5205973464' ? 'warning' : 'success');
 });

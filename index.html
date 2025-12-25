@@ -1,26 +1,54 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Viaje Panas 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Outfit:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Montserrat', 'sans-serif'],
+                    },
+                    animation: {
+                        'fadeInUp': 'fadeInUp 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
+
 <body>
     <div id="root"></div>
-    
+
     <!-- Sistema de persistencia -->
     <script src="data/storage.js"></script>
-    
+
     <!-- Datos -->
     <script src="data/destinations.js"></script>
     <script src="data/users.js"></script>
     <script type="text/babel" src="data/mediaService.js"></script>
-    
+
     <!-- Componentes -->
     <script type="text/babel" src="components/UserSelection.js"></script>
     <script type="text/babel" src="components/VotingCard.js"></script>
@@ -28,8 +56,10 @@
     <script type="text/babel" src="components/FlightsTab.js"></script>
     <script type="text/babel" src="components/TikTokFeed.js"></script>
     <script type="text/babel" src="components/ItineraryPlanner.js"></script>
-    
+    <script type="text/babel" src="components/VotingRanking.js"></script>
+
     <!-- App principal -->
     <script type="text/babel" src="components/App.js"></script>
 </body>
+
 </html>

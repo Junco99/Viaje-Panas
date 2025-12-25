@@ -30,11 +30,11 @@ h1, h2, h3, h4 {
     }
 }
 
-/* === GRADIENT BACKGROUND === */
+/* === GRADIENT BACKGROUND - MÁS VIBRANTE === */
 .gradient-bg {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+    background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB, #FF00CC, #3333FF);
     background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    animation: gradientShift 10s ease infinite;
 }
 
 @keyframes gradientShift {
@@ -434,13 +434,13 @@ h1, h2, h3, h4 {
 
 /* === IMPROVED COMPONENT STYLES === */
 
-/* Better Glass Effect */
+/* Better Glass Effect - Más contrastado */
 .glass-effect-enhanced {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
 /* Enhanced Cards */
@@ -457,18 +457,20 @@ h1, h2, h3, h4 {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
-/* Better Button Styles */
+/* Better Button Styles - Colores saturados */
 .btn-primary-enhanced {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #FF00CC 0%, #3333FF 100%);
     color: white;
     border: none;
-    padding: 12px 24px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 0.95rem;
+    padding: 14px 28px;
+    border-radius: 16px;
+    font-weight: 800;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 20px rgba(255, 0, 204, 0.4);
 }
 
 .btn-primary-enhanced:hover {

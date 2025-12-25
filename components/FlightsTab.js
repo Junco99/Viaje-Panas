@@ -2,12 +2,12 @@
 function FlightsTab({ destination, realPrices, loadingPrices }) {
     const deals = destination.flightData.deals;
     const kiwiUrl = `https://www.kiwi.com/es/search/results/madrid-espana/${destination.name.toLowerCase().replace(/\s+/g, '-')}/2026-08-05/2026-08-09/`;
-    
+
     const realFlightsData = realPrices[destination.id];
     const isRealData = realFlightsData && realFlightsData.source === 'serpapi';
     const flightsToShow = isRealData && realFlightsData.flights ? realFlightsData.flights.slice(0, 3) : null;
     const isLoading = loadingPrices[destination.id];
-    
+
     if (isLoading) {
         return (
             <div className="text-center py-12">
@@ -16,7 +16,7 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
             </div>
         );
     }
-    
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -26,8 +26,8 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                 <p className="text-xl">
                     Madrid ({destination.flightData.iataOrigin}) → {destination.name} ({destination.flightData.iataDestination})
                 </p>
-          
-                
+
+
                 {isRealData && (
                     <div className="mt-4 inline-flex items-center gap-2 bg-green-500/20 border border-green-300 px-4 py-2 rounded-lg text-sm">
                         <span>✅</span>
@@ -35,16 +35,16 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                     </div>
                 )}
             </div>
-            
+
             {/* Flight Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {(isRealData && flightsToShow ? flightsToShow : deals).map((item, index) => {
                     const isReal = isRealData && flightsToShow;
                     const flight = isReal ? item : null;
                     const deal = isReal ? null : item;
-                    
+
                     return (
-                        <div 
+                        <div
                             key={index}
                             className={`info-card bg-white rounded-2xl shadow-lg p-6 border-2 ${index === 0 && isReal ? 'border-green-500' : 'border-gray-200'}`}
                         >
@@ -53,7 +53,7 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                                     ⭐ MEJOR PRECIO REAL
                                 </div>
                             )}
-                            
+
                             {/* Times or Dates */}
                             <div className="text-center mb-4">
                                 {isReal && <div className="text-sm text-gray-500 mb-2">HORARIO IDA</div>}
@@ -65,7 +65,7 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                                 {!isReal && <div className="text-sm text-gray-500 mb-2">FECHAS</div>}
                                 {!isReal && <div className="font-bold mb-2">{deal.date}</div>}
                             </div>
-                            
+
                             {/* Price */}
                             <div className="text-center mb-4">
                                 <div className="text-4xl font-black text-green-600">
@@ -73,7 +73,7 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                                 </div>
                                 <div className="text-xs text-gray-500">por persona ida y vuelta</div>
                             </div>
-                            
+
                             {/* Details */}
                             <div className="space-y-2 text-sm">
                                 <div className="flex justify-between">
@@ -85,7 +85,7 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                                 <div className="flex justify-between">
                                     <span className="text-gray-600">⏱️ Duración:</span>
                                     <span className="font-semibold">
-                                        {isReal ? flight.duration : destination.flightData.duration}
+                                        {(isReal ? flight.duration : destination.flightData.duration) || 'Consultar'}
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
@@ -99,7 +99,7 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                     );
                 })}
             </div>
-            
+
             {/* CTA */}
             <div className="text-center">
                 <p className="text-gray-600 mb-4">
@@ -114,7 +114,7 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                     {isRealData ? '✈️ Reservar en Kiwi.com →' : '🔍 Ver todos los vuelos en Kiwi.com →'}
                 </a>
             </div>
-            
+
             {/* Disclaimer */}
             <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-gray-600">
                 <p className="font-semibold mb-2">⚠️ Información importante:</p>
