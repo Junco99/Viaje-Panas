@@ -11,79 +11,119 @@ function App() {
     const [loadingPrices, setLoadingPrices] = React.useState({});
     const [pricesLoaded, setPricesLoaded] = React.useState({});
 
-    // Cargar datos al iniciar
+    // Cargar datos al iniciar y escuchar cambios en tiempo real
     React.useEffect(() => {
-        loadVotes();
         loadSelectedUser();
+        loadVotes();
+
+        // Escuchar cambios en votos en tiempo real
+        const unsubscribe = window.firebaseDB.onVotesChange((newVotes) => {
+            setVotes(newVotes);
+            const total = Object.values(newVotes).reduce((sum, count) => sum + count, 0);
+            setTotalVotes(total);
+        });
+
+        // Cleanup al desmontar
+        return () => unsubscribe();
     }, []);
 
+
     const loadSelectedUser = async () => {
+        if (!selectedUser) return;
+
         try {
-            const { value } = await window.storage.get('selected-user');
-            if (value && value !== '{}') {
-                const user = JSON.parse(value);
+            const user = await window.firebaseDB.getUserSelection(selectedUser.id);
+            if (user) {
                 setSelectedUser(user);
                 setCurrentView('voting');
+
+                // Verificar si ya votó
+                const voted = await window.firebaseDB.hasUserVoted(user.id);
+                setHasVoted(voted);
+
+                if (voted) {
+                    const votedDestination = await window.firebaseDB.getUserVote(user.id);
+                    setVotedFor(votedDestination);
+                }
             }
         } catch (error) {
             console.error('Error loading user:', error);
         }
     };
 
+
     const selectUser = async (user) => {
         setSelectedUser(user);
         setCurrentView('voting');
+
         try {
-            await window.storage.set('selected-user', JSON.stringify(user));
+            await window.firebaseDB.saveUserSelection(user);
+
+            // Verificar si ya votó
+            const voted = await window.firebaseDB.hasUserVoted(user.id);
+            setHasVoted(voted);
+
+            if (voted) {
+                const votedDestination = await window.firebaseDB.getUserVote(user.id);
+                setVotedFor(votedDestination);
+            }
         } catch (error) {
             console.error('Error saving user:', error);
         }
     };
 
+
     const logoutUser = async () => {
+        if (selectedUser) {
+            try {
+                await window.firebaseDB.removeUserSelection(selectedUser.id);
+            } catch (error) {
+                console.error('Error removing user:', error);
+            }
+        }
+
         setSelectedUser(null);
         setCurrentView('user-selection');
-        try {
-            await window.storage.set('selected-user', '{}');
-        } catch (error) {
-            console.error('Error logging out:', error);
-        }
+        setHasVoted(false);
+        setVotedFor(null);
     };
+
 
     const loadVotes = async () => {
         try {
-            const { value } = await window.storage.get('travel-votes');
-            if (value && value !== '{}') {
-                const savedVotes = JSON.parse(value);
-                setVotes(savedVotes);
-                setTotalVotes(Object.values(savedVotes).reduce((sum, count) => sum + count, 0));
+            const votes = await window.firebaseDB.getVotes();
+            setVotes(votes);
+
+            const total = Object.values(votes).reduce((sum, count) => sum + count, 0);
+            setTotalVotes(total);
+
+            // Si hay usuario seleccionado, verificar su voto
+            if (selectedUser) {
+                const voted = await window.firebaseDB.hasUserVoted(selectedUser.id);
+                setHasVoted(voted);
+
+                if (voted) {
+                    const votedDestination = await window.firebaseDB.getUserVote(selectedUser.id);
+                    setVotedFor(votedDestination);
+                }
             }
-
-            const { value: hasVotedValue } = await window.storage.get('has-voted');
-            setHasVoted(hasVotedValue === 'true');
-
-            const { value: votedForValue } = await window.storage.get('voted-for');
-            setVotedFor(votedForValue);
         } catch (error) {
             console.error('Error loading votes:', error);
         }
     };
 
+
     const saveVote = async (destinationId) => {
-        if (hasVoted) return;
-
-        const newVotes = { ...votes };
-        newVotes[destinationId] = (newVotes[destinationId] || 0) + 1;
-
-        setVotes(newVotes);
-        setHasVoted(true);
-        setVotedFor(destinationId);
-        setTotalVotes(totalVotes + 1);
+        if (hasVoted || !selectedUser) return;
 
         try {
-            await window.storage.set('travel-votes', JSON.stringify(newVotes));
-            await window.storage.set('has-voted', 'true');
-            await window.storage.set('voted-for', destinationId);
+            const success = await window.firebaseDB.saveVote(selectedUser.id, destinationId);
+
+            if (success) {
+                setHasVoted(true);
+                setVotedFor(destinationId);
+                // Los votos se actualizan automáticamente por el listener
+            }
         } catch (error) {
             console.error('Error saving vote:', error);
         }
@@ -110,15 +150,14 @@ function App() {
     };
 
     const resetVotes = async () => {
-        setVotes({});
-        setHasVoted(false);
-        setVotedFor(null);
-        setTotalVotes(0);
-
         try {
-            await window.storage.set('travel-votes', '{}');
-            await window.storage.set('has-voted', 'false');
-            await window.storage.set('voted-for', '');
+            const success = await window.firebaseDB.resetVotes();
+
+            if (success) {
+                setHasVoted(false);
+                setVotedFor(null);
+                // Los votos se actualizan automáticamente por el listener
+            }
         } catch (error) {
             console.error('Error resetting votes:', error);
         }
