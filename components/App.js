@@ -10,6 +10,19 @@ function App() {
     const [realPrices, setRealPrices] = React.useState({});
     const [loadingPrices, setLoadingPrices] = React.useState({});
     const [pricesLoaded, setPricesLoaded] = React.useState({});
+    const [secretCount, setSecretCount] = React.useState(0);
+    const [showMemes, setShowMemes] = React.useState(false);
+
+
+
+    const handleSecretClick = () => {
+        const newCount = secretCount + 1;
+        setSecretCount(newCount);
+        if (newCount === 7) {
+            setShowMemes(true);
+            setSecretCount(0);
+        }
+    };
 
     // Cargar datos al iniciar y escuchar cambios en tiempo real
     React.useEffect(() => {
@@ -28,26 +41,56 @@ function App() {
         }
     }, []);
 
-
-    const loadSelectedUser = async () => {
-        if (!selectedUser) return;
-
-        try {
-            if (!window.firebaseDB) throw new Error('Firebase DB not initialized');
-            const user = await window.firebaseDB.getUserSelection(selectedUser.id);
+    // Effect to check for local storage user on mount
+    React.useEffect(() => {
+        const savedUserId = localStorage.getItem('panas_selected_user');
+        if (savedUserId && window.panas) {
+            const user = window.panas.find(p => p.id === savedUserId);
             if (user) {
+                // Restore user session without triggering a full re-selection logic yet
+                // We will let loadSelectedUser handle the firebase verification part
+                console.log("Restoring session for:", user.name);
                 setSelectedUser(user);
                 setCurrentView('voting');
-
-                // Verificar si ya votó
-                const voted = await window.firebaseDB.hasUserVoted(user.id);
-                setHasVoted(voted);
-
-                if (voted) {
-                    const votedDestination = await window.firebaseDB.getUserVote(user.id);
-                    setVotedFor(votedDestination);
-                }
             }
+        }
+    }, []);
+
+    // Modificado para usar el usuario persistido correctamente
+    const loadSelectedUser = async () => {
+        // Obtenemos el ID del storage o del state si ya se seteo en el efecto anterior
+        let userIdToLoad = selectedUser?.id;
+
+        if (!userIdToLoad) {
+            userIdToLoad = localStorage.getItem('panas_selected_user');
+        }
+
+        if (!userIdToLoad) return;
+
+        try {
+            // Asegurar que tenemos el objeto usuario completo si venimos del storage
+            if (!selectedUser && window.panas) {
+                const userObj = window.panas.find(p => p.id === userIdToLoad);
+                if (userObj) setSelectedUser(userObj);
+            }
+
+            if (!window.firebaseDB) throw new Error('Firebase DB not initialized');
+
+            // Verificación opcional con Firebase (solo para asegurar consistencia)
+            const user = await window.firebaseDB.getUserSelection(userIdToLoad);
+
+            // Si el usuario existe, aseguramos la vista
+            setCurrentView('voting');
+
+            // Verificar si ya votó
+            const voted = await window.firebaseDB.hasUserVoted(userIdToLoad);
+            setHasVoted(voted);
+
+            if (voted) {
+                const votedDestination = await window.firebaseDB.getUserVote(userIdToLoad);
+                setVotedFor(votedDestination);
+            }
+
         } catch (error) {
             console.error('Error loading user:', error);
         }
@@ -57,6 +100,9 @@ function App() {
     const selectUser = async (user) => {
         setSelectedUser(user);
         setCurrentView('voting');
+
+        // Persistir en local
+        localStorage.setItem('panas_selected_user', user.id);
 
         try {
             await window.firebaseDB.saveUserSelection(user);
@@ -84,6 +130,7 @@ function App() {
             }
         }
 
+        localStorage.removeItem('panas_selected_user');
         setSelectedUser(null);
         setCurrentView('user-selection');
         setHasVoted(false);
@@ -101,12 +148,14 @@ function App() {
             setTotalVotes(total);
 
             // Si hay usuario seleccionado, verificar su voto
-            if (selectedUser) {
-                const voted = await window.firebaseDB.hasUserVoted(selectedUser.id);
+            const currentUserId = selectedUser?.id || localStorage.getItem('panas_selected_user');
+
+            if (currentUserId) {
+                const voted = await window.firebaseDB.hasUserVoted(currentUserId);
                 setHasVoted(voted);
 
                 if (voted) {
-                    const votedDestination = await window.firebaseDB.getUserVote(selectedUser.id);
+                    const votedDestination = await window.firebaseDB.getUserVote(currentUserId);
                     setVotedFor(votedDestination);
                 }
             }
@@ -117,7 +166,7 @@ function App() {
 
 
     const saveVote = async (destinationId) => {
-        if (!selectedUser) return;
+        if (hasVoted || !selectedUser) return;
 
         try {
             const success = await window.firebaseDB.saveVote(selectedUser.id, destinationId);
@@ -125,10 +174,29 @@ function App() {
             if (success) {
                 setHasVoted(true);
                 setVotedFor(destinationId);
+
                 // Los votos se actualizan automáticamente por el listener
+
             }
         } catch (error) {
             console.error('Error saving vote:', error);
+        }
+    };
+
+    const resetVotes = async () => {
+        if (!confirm('¿Seguro que quieres borrar TODOS los votos? Esta acción no se puede deshacer.')) return;
+
+        try {
+            const success = await window.firebaseDB.resetVotes();
+            if (success) {
+                setHasVoted(false);
+                setVotedFor(null);
+                // Los votos se actualizan automáticamente por el listener
+                alert('Votos reseteados correctamente');
+            }
+        } catch (error) {
+            console.error('Error resetting votes:', error);
+            alert('Error al resetear votos');
         }
     };
 
@@ -204,7 +272,10 @@ function App() {
                         </button>
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tight">
+                    <h1
+                        onClick={handleSecretClick}
+                        className="text-4xl md:text-6xl font-black text-slate-900 mb-4 tracking-tight cursor-default select-none active:scale-95 transition-transform"
+                    >
                         Viaje Panas 2026
                     </h1>
                     <p className="text-lg md:text-xl text-slate-500 max-w-lg mx-auto">
@@ -242,11 +313,32 @@ function App() {
                     ))}
                 </div>
 
+                <div className="text-center mt-12">
+                    <button
+                        onClick={resetVotes}
+                        className="text-slate-300 hover:text-red-400 transition-all text-[10px] font-bold uppercase tracking-widest"
+                    >
+                        Resetear Votos (Admin)
+                    </button>
+                </div>
+
 
             </div>
 
             {/* Footer con políticas del grupo */}
             <Footer />
+
+            {/* EASTER EGG MEMES */}
+            {showMemes && (
+                <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4" onClick={() => setShowMemes(false)}>
+                    <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-4 animate-bounce">
+                        <img src="assets/meme1.jpeg" alt="Meme 1" className="rounded-xl shadow-2xl border-4 border-yellow-400 rotate-[-5deg]" />
+                        <img src="assets/meme2.jpeg" alt="Meme 2" className="rounded-xl shadow-2xl border-4 border-yellow-400 rotate-[5deg]" />
+                    </div>
+                </div>
+            )}
+
+
         </div>
     );
 }
