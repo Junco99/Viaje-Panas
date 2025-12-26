@@ -26,12 +26,22 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
 
                 <div className="relative container-responsive hero-content-mobile h-full flex flex-col justify-center">
                     <div className="text-white">
-                        <button
-                            onClick={onBack}
-                            className="glass-effect-enhanced px-4 py-2 rounded-lg mb-4 hover:bg-white/20 transition-all inline-flex items-center gap-2 btn-mobile"
-                        >
-                            ← Volver
-                        </button>
+                        <div className="flex flex-wrap gap-3 mt-6">
+                            <button
+                                onClick={() => onBack()}
+                                className="px-6 py-2 rounded-full border border-white/30 text-white font-bold text-sm hover:bg-white/10 transition-all backdrop-blur-sm"
+                            >
+                                ← Volver
+                            </button>
+                            <a
+                                href={`https://wa.me/?text=¡Mirad este destino para el viaje! 🌴 *${destination.name}* %0A%0A${destination.description}%0A%0A💸 Precio estimado: ${destination.price}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-6 py-2 rounded-full bg-[#25D366] text-white font-bold text-sm hover:bg-[#128C7E] transition-all flex items-center gap-2 shadow-lg hover:scale-105"
+                            >
+                                <span>📱</span> Compartir en Grupo
+                            </a>
+                        </div>
 
                         {/* Mobile: Stack flag and content, Desktop: Side by side */}
                         <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
@@ -116,8 +126,8 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
 
                 <div className="mb-8 md:mb-12 px-2 md:px-0">
                     <div className="text-center mb-6 md:mb-8">
-                        <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">Información Esencial</h2>
-                        <p className="text-slate-500 text-sm md:text-base">Datos clave para tu planificación</p>
+                        <h2 className="text-2xl md:text-3xl font-black text-white mb-2">Información Esencial</h2>
+                        <p className="text-slate-300 text-sm md:text-base opacity-80">Datos clave para tu planificación</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 cards-grid-mobile cards-grid-tablet">
@@ -171,14 +181,14 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                         </div>
 
                         {/* Card Vibe - RESPONSIVE */}
-                        <div className="bg-white rounded-xl md:rounded-2xl shadow-sm p-4 md:p-6 border border-slate-200 card-mobile">
-                            <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-3 md:mb-4 uppercase tracking-widest text-[11px] text-slate-400">Atmósfera</h3>
-                            <p className="text-slate-700 leading-relaxed mb-3 md:mb-4 text-sm md:text-base italic">
+                        <div className="bg-white/5 backdrop-blur-md rounded-xl md:rounded-2xl shadow-sm p-4 md:p-6 border border-white/10 card-mobile">
+                            <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-4 uppercase tracking-widest text-[11px] opacity-60">Atmósfera</h3>
+                            <p className="text-slate-300 leading-relaxed mb-3 md:mb-4 text-sm md:text-base italic">
                                 "{destination.description}"
                             </p>
                             <div className="flex flex-wrap gap-2">
                                 {destination.bestFor && destination.bestFor.map(tag => (
-                                    <span key={tag} className="bg-slate-100 text-slate-600 px-2 py-1 rounded text-[10px] font-bold uppercase">
+                                    <span key={tag} className="bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded text-[10px] font-bold uppercase border border-indigo-500/30">
                                         {tag}
                                     </span>
                                 ))}
@@ -190,11 +200,11 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                 {/* 3. TABS - COMPLETAMENTE RESPONSIVE */}
                 <div className="mb-6 md:mb-8 px-2 md:px-0">
                     <div className="text-center mb-4 md:mb-6">
-                        <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-2 flex items-center justify-center gap-2 md:gap-3">
+                        <h2 className="text-2xl md:text-3xl font-black text-white mb-2 flex items-center justify-center gap-2 md:gap-3">
                             <span>🎯</span>
                             <span>Más Sobre {destination.name}</span>
                         </h2>
-                        <p className="text-gray-600 text-sm md:text-base">Explora fotos, videos y más info</p>
+                        <p className="text-indigo-300/60 text-sm md:text-base font-medium">Explora fotos, videos y más info</p>
                     </div>
 
                     {/* Tabs navegación - RESPONSIVE */}
@@ -212,8 +222,8 @@ function DestinationDetail({ destination, onBack, realPrices, loadingPrices, onL
                                     key={id}
                                     onClick={() => setActiveTab(id)}
                                     className={`pb-3 px-3 text-sm font-bold transition-all whitespace-nowrap ${activeTab === id
-                                        ? 'text-blue-600 border-b-4 border-blue-600'
-                                        : 'text-gray-600 hover:text-gray-900 border-b-4 border-transparent'
+                                        ? 'text-blue-400 border-b-4 border-blue-400'
+                                        : 'text-slate-400 hover:text-white border-b-4 border-transparent'
                                         }`}
                                 >
                                     <span className="block sm:hidden">{icon}</span>

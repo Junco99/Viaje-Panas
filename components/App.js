@@ -17,14 +17,15 @@ function App() {
         loadVotes();
 
         // Escuchar cambios en votos en tiempo real
-        const unsubscribe = window.firebaseDB.onVotesChange((newVotes) => {
-            setVotes(newVotes);
-            const total = Object.values(newVotes).reduce((sum, count) => sum + count, 0);
-            setTotalVotes(total);
-        });
-
-        // Cleanup al desmontar
-        return () => unsubscribe();
+        if (window.firebaseDB && window.firebaseDB.onVotesChange) {
+            const unsubscribe = window.firebaseDB.onVotesChange((newVotes) => {
+                setVotes(newVotes);
+                const total = Object.values(newVotes).reduce((sum, count) => sum + count, 0);
+                setTotalVotes(total);
+            });
+            // Cleanup al desmontar
+            return () => unsubscribe();
+        }
     }, []);
 
 
@@ -32,6 +33,7 @@ function App() {
         if (!selectedUser) return;
 
         try {
+            if (!window.firebaseDB) throw new Error('Firebase DB not initialized');
             const user = await window.firebaseDB.getUserSelection(selectedUser.id);
             if (user) {
                 setSelectedUser(user);
@@ -91,6 +93,7 @@ function App() {
 
     const loadVotes = async () => {
         try {
+            if (!window.firebaseDB) throw new Error('Firebase DB not initialized');
             const votes = await window.firebaseDB.getVotes();
             setVotes(votes);
 
@@ -269,4 +272,5 @@ function App() {
     );
 }
 
-ReactDOM.render(React.createElement(App), document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(App));

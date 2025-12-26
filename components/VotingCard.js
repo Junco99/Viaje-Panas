@@ -36,7 +36,7 @@ function VotingCard({ destination, votes, totalVotes, hasVoted, votedFor, onVote
                     </div>
 
                     <h3 className="text-2xl md:text-3xl font-bold mb-2 drop-shadow-lg">{destination.name}</h3>
-                    <p className="text-base md:text-lg text-gray-100 mb-4 drop-shadow line-clamp-2">{destination.tagline}</p>
+                    <p className="text-base md:text-lg text-white mb-4 drop-shadow-lg line-clamp-2">{destination.tagline}</p>
 
                     <div className="space-y-2">
                         <div className="bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded flex items-center justify-between">

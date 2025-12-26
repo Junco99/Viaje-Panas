@@ -107,8 +107,6 @@ app.get('/api/health', (req, res) => {
 app.get('/api/flights/:destination/:period', async (req, res) => {
   const { destination, period } = req.params;
 
-  log(`🔍 Solicitando vuelos para ${destination} (${period})`, 'info');
-
   // Mapeo de destinos a códigos IATA
   const destCodes = {
     'albania': 'TIA',
@@ -142,12 +140,10 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
   try {
     // Incrementar contador
     monthlySearchCount++;
-    log(`📊 Búsquedas este mes: ${monthlySearchCount}/${MAX_MONTHLY_SEARCHES}`, 'info');
 
     // Llamar a SerpAPI
     const serpUrl = `https://serpapi.com/search.json?engine=google_flights&departure_id=MAD&arrival_id=${iataCode}&outbound_date=${dates.outbound}&return_date=${dates.return}&currency=EUR&hl=es&gl=es&adults=1&type=1&api_key=${SERPAPI_KEY}`;
 
-    log(`🌐 Consultando SerpAPI...`, 'info');
     const response = await fetch(serpUrl);
 
     if (!response.ok) {
@@ -220,14 +216,12 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
           : 'Directo',
         originAirport: 'MAD',
         destAirport: iataCode,
-        bookingUrl: `https://www.google.com/travel/flights`,
+        bookingUrl: `https://www.google.com/travel/flights?tfs=${flight.token || ''}&q=Flights%20to%20${iataCode}%20from%20MAD%20on%20${dates.outbound}%20through%20${dates.return}`,
         scraped: true,
         source: 'serpapi',
         scrapedAt: new Date().toISOString()
       };
     });
-
-    log(`✅ ${flights.length} vuelos obtenidos de SerpAPI`, 'success');
 
     res.json({
       flights: flights,
@@ -254,7 +248,7 @@ app.get('/api/flights/:destination/:period', async (req, res) => {
 // Formatear duración de minutos a "Xh Ym"
 function formatDuration(minutes) {
   const mins = parseInt(minutes);
-  if (isNaN(mins) || mins <= 0) return 'Derr. desc.';
+  if (isNaN(mins) || mins <= 0) return 'Vuelo';
 
   const hours = Math.floor(mins / 60);
   const remainingMins = mins % 60;
@@ -266,11 +260,11 @@ function formatDuration(minutes) {
 // Obtener datos mock como fallback
 function getMockFlightData(destination) {
   const mockPrices = {
-    'albania': { base: 125, airline: 'Wizz Air', duration: 135, iata: 'TIA' },
-    'georgia': { base: 289, airline: 'Turkish Airlines', duration: 390, iata: 'TBS' },
-    'serbia': { base: 98, airline: 'Air Serbia', duration: 165, iata: 'BEG' },
-    'malta': { base: 145, airline: 'Ryanair', duration: 150, iata: 'MLA' },
-    'norway': { base: 234, airline: 'SAS', duration: 165, iata: 'BGO' }
+    'albania': { base: 63, airline: 'Wizz Air', duration: 185, iata: 'TIA' },
+    'georgia': { base: 225, airline: 'Turkish Airlines', duration: 330, iata: 'TBS' },
+    'serbia': { base: 81, airline: 'Air Serbia', duration: 200, iata: 'BEG' },
+    'malta': { base: 55, airline: 'Ryanair', duration: 150, iata: 'MLA' },
+    'norway': { base: 185, airline: 'SAS', duration: 210, iata: 'BGO' }
   };
 
   const mock = mockPrices[destination] || mockPrices['albania'];

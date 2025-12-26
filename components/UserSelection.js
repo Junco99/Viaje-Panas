@@ -41,8 +41,8 @@ function UserSelection({ onUserSelect }) {
                             {/* Card GLASSMORPHISM profesional con efecto 3D */}
                             <div
                                 className={`relative rounded-3xl p-6 md:p-8 transition-all duration-300 border overflow-hidden ${hoveredUser === pana.id || touchedUser === pana.id
-                                        ? 'border-blue-400/60 shadow-2xl shadow-blue-500/20'
-                                        : 'border-white/10 shadow-xl hover:shadow-2xl'
+                                    ? 'border-blue-400/60 shadow-2xl shadow-blue-500/20'
+                                    : 'border-white/10 shadow-xl hover:shadow-2xl'
                                     }`}
                                 style={{
                                     background: 'rgba(255, 255, 255, 0.08)',
@@ -106,8 +106,8 @@ function UserSelection({ onUserSelect }) {
                                     {/* Botón profesional con feedback táctil */}
                                     <button
                                         className={`w-full py-3.5 md:py-4 rounded-2xl font-bold text-base md:text-lg transition-all duration-300 border ${hoveredUser === pana.id || touchedUser === pana.id
-                                                ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/30 scale-[0.98]'
-                                                : 'bg-white/10 backdrop-blur-sm text-white border-white/20 hover:bg-white/20'
+                                            ? 'bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/30 scale-[0.98]'
+                                            : 'bg-white/10 backdrop-blur-sm text-white border-white/20 hover:bg-white/20'
                                             }`}
                                     >
                                         {hoveredUser === pana.id || touchedUser === pana.id ? '✓ Seleccionar' : 'Continuar'}
@@ -129,7 +129,7 @@ function UserSelection({ onUserSelect }) {
             </div>
 
             {/* Estilos para animaciones */}
-            <style jsx>{`
+            <style>{`
                 @keyframes fadeInUp {
                     from {
                         opacity: 0;

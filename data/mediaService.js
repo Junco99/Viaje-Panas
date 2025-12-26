@@ -14,7 +14,6 @@ window.mediaService = {
     },
 
     async searchImages(query, perPage = 10) {
-        console.log('🔍 Buscando:', query);
         try {
             // URL simple que FUNCIONA
             const url = `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(query)}&image_type=photo&per_page=${perPage}`;
@@ -30,11 +29,9 @@ window.mediaService = {
             const data = await response.json();
 
             if (data.hits && data.hits.length > 0) {
-                console.log(`✅ ${data.hits.length} fotos (total: ${data.totalHits})`);
                 return data.hits;
             }
 
-            console.log(`⚠️ 0 resultados`);
             return [];
         } catch (error) {
             console.error('❌ Error:', error.message);
@@ -43,11 +40,8 @@ window.mediaService = {
     },
 
     async getDestinationImages(destinationId) {
-        console.log('🌍 Cargando:', destinationId);
-
         // Cache
         if (this.imageCache[destinationId]) {
-            console.log('📦 Cache');
             return this.imageCache[destinationId];
         }
 
@@ -73,8 +67,6 @@ window.mediaService = {
         let finalImages = Array.from(uniqueImages.values());
         finalImages = finalImages.sort(() => Math.random() - 0.5).slice(0, 12);
 
-        console.log(`✅ ${finalImages.length} imágenes únicas`);
-
         this.imageCache[destinationId] = finalImages;
         return finalImages;
     },
@@ -96,7 +88,6 @@ function ImageGallery({ destination }) {
     const [selectedImage, setSelectedImage] = React.useState(null);
 
     React.useEffect(() => {
-        console.log('🎨 Gallery:', destination.name);
         loadImages();
     }, [destination.id]);
 
@@ -117,8 +108,8 @@ function ImageGallery({ destination }) {
         return (
             <div className="flex items-center justify-center py-20">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-slate-600 font-semibold">Cargando fotos de {destination.name}...</p>
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo-400 mx-auto mb-4"></div>
+                    <p className="text-slate-400 font-semibold">Cargando fotos de {destination.name}...</p>
                 </div>
             </div>
         );
@@ -213,7 +204,3 @@ function ImageGallery({ destination }) {
 }
 
 window.ImageGallery = ImageGallery;
-
-console.log('✅ mediaService cargado');
-console.log('🔑 API Key:', PIXABAY_API_KEY ? 'OK ✓' : '❌');
-console.log('🌍 Destinos:', Object.keys(window.mediaService.destinationSearches).join(', '));

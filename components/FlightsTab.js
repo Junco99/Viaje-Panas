@@ -11,8 +11,8 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
     if (isLoading) {
         return (
             <div className="text-center py-12">
-                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-                <p className="text-gray-600">Cargando precios reales...</p>
+                <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-400 mb-4"></div>
+                <p className="text-slate-400 font-medium">Cargando precios reales...</p>
             </div>
         );
     }
@@ -23,7 +23,7 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
             <div className="bg-slate-900 text-white rounded-2xl shadow-sm p-8 text-center border border-slate-800">
                 <h3 className="text-3xl font-extrabold mb-2 tracking-tight">Opciones de Vuelo</h3>
                 <p className="text-slate-400 font-medium">
-                    {destination.flightData.iataOrigin} — {destination.flightData.iataDestination}
+                    {destination.flightData.iataOrigin} — {destination.flightData.iataDestination} • Agosto 2026
                 </p>
 
                 {isRealData && (
@@ -106,52 +106,56 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
 
                             {/* Price */}
                             <div className="text-center mb-6 bg-slate-50 rounded-xl py-4 border border-slate-100">
-                                <div className="text-3xl font-extrabold text-white">
+                                <div className="text-3xl font-extrabold text-indigo-600 font-display">
                                     {isReal ? flight.price : deal.price}
                                 </div>
                                 <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Precio total ida y vuelta</div>
                             </div>
 
-                            {/* Details */}
-                            <div className="space-y-3 text-xs">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-slate-500 font-medium font-display">Aerolínea</span>
-                                    <span className="font-bold text-slate-900 italic">
-                                        {isReal ? flight.airline.name : destination.flightData.airline}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-slate-500 font-medium font-display">Duración</span>
-                                    <span className="font-semibold text-slate-700">
-                                        {(isReal ? flight.duration : destination.flightData.duration) || 'Consultar'}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-slate-500 font-medium font-display">Escalas</span>
-                                    <span className={`font-bold ${(isReal && flight.stops === 0) || (!isReal && deal.stops === 'Directo') ? 'text-emerald-600' : 'text-slate-900'}`}>
-                                        {isReal ? flight.stopsText : deal.stops}
-                                    </span>
-                                </div>
+                            {/* Action */}
+                            <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-3">
+                                {isReal && flight.bookingUrl && (
+                                    <a
+                                        href={flight.bookingUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="bg-indigo-600 hover:bg-indigo-700 text-white text-center py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
+                                    >
+                                        Reservar Vuelo
+                                    </a>
+                                )}
+                                {!isReal && (
+                                    <a
+                                        href={kiwiUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="bg-slate-100 hover:bg-slate-200 text-slate-600 text-center py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
+                                    >
+                                        Ver en Kiwi.com
+                                    </a>
+                                )}
                             </div>
                         </div>
                     );
                 })}
             </div>
 
-            {/* CTA */}
-            <div className="text-center">
-                <p className="text-gray-600 mb-4">
-                    {isRealData ? '¿Quieres reservar estos vuelos o ver más opciones?' : '¿Quieres ver precios actualizados en tiempo real?'}
-                </p>
-                <a
-                    href={kiwiUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-4 rounded-xl font-bold text-xl shadow-xl hover:scale-105 transition-all"
-                >
-                    {isRealData ? '✈️ Reservar en Kiwi.com →' : '🔍 Ver todos los vuelos en Kiwi.com →'}
-                </a>
-            </div>
+            {/* CTA - Solo si estamos en modo mock (sin precios reales) */}
+            {!isRealData && (
+                <div className="text-center">
+                    <p className="text-gray-600 mb-4">
+                        ¿Quieres ver precios actualizados en tiempo real?
+                    </p>
+                    <a
+                        href={kiwiUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-4 rounded-xl font-bold text-xl shadow-xl hover:scale-105 transition-all"
+                    >
+                        🔍 Ver todos los vuelos en Kiwi.com →
+                    </a>
+                </div>
+            )}
 
             {/* Disclaimer */}
             <div className="mt-8 p-6 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-500">
