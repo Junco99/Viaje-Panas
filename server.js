@@ -284,7 +284,7 @@ function getMockFlightData(destination) {
         stopsText: 'Directo',
         originAirport: 'MAD',
         destAirport: mock.iata,
-        bookingUrl: `https://www.kiwi.com/es/search/results/madrid-espana/${destination}/2026-08-05/2026-08-09/`,
+        bookingUrl: `https://www.google.com/travel/flights?q=Flights%20to%20${mock.iata}%20from%20MAD%20on%202026-08-05%20through%202026-08-09`,
         scraped: false,
         source: 'mock'
       },
@@ -301,7 +301,7 @@ function getMockFlightData(destination) {
         stopsText: '1 escala',
         originAirport: 'MAD',
         destAirport: mock.iata,
-        bookingUrl: `https://www.kiwi.com/es/search/results/madrid-espana/${destination}/2026-08-05/2026-08-09/`,
+        bookingUrl: `https://www.google.com/travel/flights?q=Flights%20to%20${mock.iata}%20from%20MAD%20on%202026-08-05%20through%202026-08-09`,
         scraped: false,
         source: 'mock'
       },
@@ -318,7 +318,7 @@ function getMockFlightData(destination) {
         stopsText: '1 escala · Frankfurt',
         originAirport: 'MAD',
         destAirport: mock.iata,
-        bookingUrl: `https://www.kiwi.com/es/search/results/madrid-espana/${destination}/2026-08-05/2026-08-09/`,
+        bookingUrl: `https://www.google.com/travel/flights?q=Flights%20to%20${mock.iata}%20from%20MAD%20on%202026-08-05%20through%202026-08-09`,
         scraped: false,
         source: 'mock'
       }

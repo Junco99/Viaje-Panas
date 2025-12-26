@@ -1,7 +1,7 @@
 // Componente: Tab de Vuelos
 function FlightsTab({ destination, realPrices, loadingPrices }) {
     const deals = destination.flightData.deals;
-    const kiwiUrl = `https://www.kiwi.com/es/search/results/madrid-espana/${destination.kiwiSlug || destination.id}/2026-08-05/2026-08-09/`;
+    const googleFlightsUrl = `https://www.google.com/travel/flights?q=Flights%20to%20${destination.flightData.iataDestination}%20from%20MAD%20on%202026-08-05%20through%202026-08-09`;
 
     const realFlightsData = realPrices[destination.id];
     const isRealData = realFlightsData && realFlightsData.source === 'serpapi';
@@ -126,12 +126,12 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                                 )}
                                 {!isReal && (
                                     <a
-                                        href={kiwiUrl}
+                                        href={googleFlightsUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="bg-slate-100 hover:bg-slate-200 text-slate-600 text-center py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all"
                                     >
-                                        Ver en Kiwi.com
+                                        Ver en Google Flights
                                     </a>
                                 )}
                             </div>
@@ -147,12 +147,12 @@ function FlightsTab({ destination, realPrices, loadingPrices }) {
                         ¿Quieres ver precios actualizados en tiempo real?
                     </p>
                     <a
-                        href={kiwiUrl}
+                        href={googleFlightsUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-4 rounded-xl font-bold text-xl shadow-xl hover:scale-105 transition-all"
+                        className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-12 py-4 rounded-xl font-bold text-xl shadow-xl hover:scale-105 transition-all"
                     >
-                        🔍 Ver todos los vuelos en Kiwi.com →
+                        🔍 Ver todos los vuelos en Google Flights →
                     </a>
                 </div>
             )}

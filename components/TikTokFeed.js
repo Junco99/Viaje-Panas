@@ -109,8 +109,8 @@ function TikTokFeed({ destination }) {
                             key={index}
                             onClick={() => setActiveHashtag(index)}
                             className={`p-3 md:p-4 rounded-xl transition-all text-left ${activeHashtag === index
-                                    ? 'bg-gradient-to-r from-pink-500 to-purple-600 transform scale-105'
-                                    : 'bg-gray-800 hover:bg-gray-700'
+                                ? 'bg-gradient-to-r from-pink-500 to-purple-600 transform scale-105'
+                                : 'bg-gray-800 hover:bg-gray-700'
                                 }`}
                         >
                             <div className="font-bold text-base md:text-lg">{hashtag.displayName}</div>
@@ -229,38 +229,6 @@ function TikTokFeed({ destination }) {
                 </div>
             </div>
 
-            {/* Call-to-Action Principal */}
-            <div className="bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 rounded-2xl p-8 text-center">
-                <h3 className="text-3xl font-black mb-4">🎯 TU MISIÓN: INVESTIGAR EN TIKTOK</h3>
-                <p className="text-lg mb-6 text-white/90">
-                    TikTok es donde está la información REAL. Los influencers locales, los precios actuales, las fiestas secretas, los lugares que están de moda AHORA.
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div className="bg-white/10 rounded-lg p-4">
-                        <div className="text-2xl mb-2">📱</div>
-                        <div className="font-semibold">Busca por hashtags</div>
-                        <div className="text-sm text-white/80">#{destination.name.toLowerCase()}, #{hashtags[0]?.tag}</div>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                        <div className="text-2xl mb-2">👥</div>
-                        <div className="font-semibold">Sigue influencers locales</div>
-                        <div className="text-sm text-white/80">Gente que vive allí</div>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-4">
-                        <div className="text-2xl mb-2">💰</div>
-                        <div className="font-semibold">Precios REALES</div>
-                        <div className="text-sm text-white/80">No los de las guías</div>
-                    </div>
-                </div>
-
-                <button
-                    onClick={() => window.open(`https://www.tiktok.com/tag/${hashtags[activeHashtag]?.tag || destination.name.toLowerCase()}?lang=es`, '_blank')}
-                    className="bg-black text-white px-8 py-4 rounded-full text-xl font-bold hover:bg-gray-900 transition-colors inline-flex items-center gap-3"
-                >
-                    🚀 EXPLORAR TIKTOK DE {destination.name.toUpperCase()}
-                </button>
-            </div>
         </div>
     );
 }

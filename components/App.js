@@ -117,7 +117,7 @@ function App() {
 
 
     const saveVote = async (destinationId) => {
-        if (hasVoted || !selectedUser) return;
+        if (!selectedUser) return;
 
         try {
             const success = await window.firebaseDB.saveVote(selectedUser.id, destinationId);
@@ -152,19 +152,7 @@ function App() {
         setLoadingPrices(prev => ({ ...prev, [destinationId]: false }));
     };
 
-    const resetVotes = async () => {
-        try {
-            const success = await window.firebaseDB.resetVotes();
 
-            if (success) {
-                setHasVoted(false);
-                setVotedFor(null);
-                // Los votos se actualizan automáticamente por el listener
-            }
-        } catch (error) {
-            console.error('Error resetting votes:', error);
-        }
-    };
 
     // RENDER: Selección de usuario
     if (currentView === 'user-selection') {
@@ -254,16 +242,7 @@ function App() {
                     ))}
                 </div>
 
-                {hasVoted && (
-                    <div className="text-center mt-12">
-                        <button
-                            onClick={resetVotes}
-                            className="text-slate-300 hover:text-red-400 transition-all text-[10px] font-bold uppercase tracking-widest"
-                        >
-                            Resetear Votos (Admin)
-                        </button>
-                    </div>
-                )}
+
             </div>
 
             {/* Footer con políticas del grupo */}
